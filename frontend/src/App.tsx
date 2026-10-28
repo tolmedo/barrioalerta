@@ -1,36 +1,20 @@
-import { Link as RouterLink, Route, Routes } from 'react-router-dom'
-import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material'
-import { Landing } from './paginas/Landing'
-import { EnConstruccion } from './paginas/EnConstruccion'
+import { Route, Routes } from 'react-router-dom'
+import { Box, Container } from '@mui/material'
 
-/** Una ruta por rol (lineamiento, sección 7.1). Profundidad máxima de navegación: 3 niveles. */
-const secciones = [
-  { ruta: '/vecino', titulo: 'Vecino', hito: 'H1', pantallas: ['Mapa del barrio (sumarse a un reclamo)', 'Reportar (3 pasos)', 'Mis reportes', 'Detalle con historial'] },
-  { ruta: '/operador', titulo: 'Operador', hito: 'H1–H2', pantallas: ['Bandeja por estado', 'Asignación con propuestas'] },
-  { ruta: '/cuadrilla', titulo: 'Cuadrilla', hito: 'H1', pantallas: ['Mis tareas', 'Resolver con foto'] },
-  { ruta: '/admin', titulo: 'Admin', hito: 'H3', pantallas: ['Tipos y SLA', 'Cuadrillas', 'Importar vecinos (CSV)', 'Notificaciones simuladas', 'Panel de demo'] },
-]
+import { Header } from './components/headers/Header'
+import { EnConstruccion } from './components/layout/EnConstruccion'
+
+import { Home } from './pages/home/Home'
+
+import { secciones } from './utils/secciones'
 
 export function App() {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="static" component="header">
-        <Toolbar sx={{ gap: 1, flexWrap: 'wrap' }}>
-          <Typography variant="h6" component={RouterLink} to="/" sx={{ color: 'inherit', textDecoration: 'none', flexGrow: 1 }}>
-            BarrioAlerta
-          </Typography>
-          <Box component="nav" aria-label="Secciones por rol" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            {secciones.map((seccion) => (
-              <Button key={seccion.ruta} color="inherit" component={RouterLink} to={seccion.ruta}>
-                {seccion.titulo}
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <Container component="main" sx={{ py: 3, flexGrow: 1 }}>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Home />} />
           {secciones.map((seccion) => (
             <Route
               key={seccion.ruta}

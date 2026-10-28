@@ -8,10 +8,10 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "tsx watch src/servidor.ts",
-    "demo": "tsx src/servidor.ts --demo",
+    "dev": "tsx watch src/server.ts",
+    "demo": "tsx src/server.ts --demo",
     "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/servidor.js",
+    "start": "node dist/server.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
