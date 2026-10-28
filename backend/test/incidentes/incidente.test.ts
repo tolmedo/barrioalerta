@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { ReglaDeNegocioError } from '../../src/compartido/dominio/errores.js';
 import { masDias, masHoras } from '../../src/compartido/dominio/tiempo.js';
-import { Usuario } from '../../src/identidad/dominio/usuario.js';
 import { Cuadrilla } from '../../src/incidentes/dominio/cuadrilla.js';
-import { Asignado, Cerrado, Validado } from '../../src/incidentes/dominio/estados.js';
+import { Asignado, Validado } from '../../src/incidentes/dominio/estados.js';
 import {
   ANA,
   BRUNO,
@@ -111,15 +110,6 @@ describe('Incidente', () => {
   });
 
   describe('Cierre y reapertura', () => {
-    it('el sistema puede cerrar por tiempo', () => {
-      const incidente = unBache().en('RESUELTO');
-
-      incidente.cerrar(Usuario.SISTEMA, masHoras(INICIO, 72));
-
-      expect(incidente.estado).toBe(Cerrado.INSTANCIA);
-      expect(incidente.historial.at(-1)!.actor.esSistema()).toBe(true);
-    });
-
     it('otro vecino no puede cerrar', () => {
       expect(() => unBache().en('RESUELTO').cerrar(BRUNO.usuario, INICIO)).toThrow(ReglaDeNegocioError);
     });

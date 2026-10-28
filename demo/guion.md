@@ -8,9 +8,9 @@
 |---|---|---|---|---|
 | 0:00–1:00 | I1 | Slide del problema → landing pública con el mapa | Problema, actores, propuesta | Slide con captura del mapa |
 | 1:00–2:30 | I7 | Slides de componentes y despliegue | Monolito modular vs microservicios (D2) | — |
-| 2:30–4:00 | I5 | Login rápido **Vecina Ana** → Reportar → Bache → pin en **Av. Medrano 940** → foto `bache-medrano.jpg` → aparece "1 reclamo parecido a 15 m" → **Sumarme** | Algoritmo de duplicados; prevención de errores (Nielsen) | Abrir #101 ya adherido |
-| 4:00–5:00 | I5 → I2 | Reportar **Luminaria** en Bulnes y Díaz Vélez → queda *Reportado* | — | Usar #102 |
-| 5:00–6:30 | I2 | Login **Operadora Carla** → bandeja → validar la luminaria → Ranking: cambiar "Ponderada" ↔ "Riesgo SLA" | **Strategy** (priorización), OCP | Captura del ranking en ambas estrategias |
+| 2:30–4:00 | I5 | Login rápido **Vecina Ana** → mapa → toca el marcador de **#101** (bache en Av. Medrano 950) → **Sumarme** → sube el contador de adhesiones | Adherir en lugar de duplicar; prevención de errores (Nielsen) | Abrir #101 ya adherido |
+| 4:00–5:00 | I5 | Reportar **Luminaria** en Bulnes y Díaz Vélez (3 pasos, foto del seed) → queda *Reportado* | Criterios de UI de la E4: microcopy, toasts, validación | Usar #102 |
+| 5:00–6:30 | I2 | Login **Admin** → mostrar la importación de `vecinos.csv` (10.000 filas) con su reporte de filas válidas y erróneas → login **Operadora Carla** → bandeja → validar la luminaria | **Template Method** (importación); **State** (solo se ofrecen las acciones válidas) | Captura del reporte de importación |
 | 6:30–8:00 | I3 → I4 | Asignar: columnas Cercanía (Norte) vs Menor carga (Luminarias) → asignar → campana de Ana: "Tu reclamo fue asignado" + bandeja simulada | **Strategy ≠ State**; **Observer** + Adapter | Usar #103 ya asignado |
 | 8:00–9:30 | I3 → I1 | Vista mobile de la cuadrilla → Iniciar → Resolver con `luminaria-ok.jpg` → historial (quién, qué, cuándo) | **State**, auditoría, no repudio | Usar #104 ya resuelto |
 | 9:30–10:45 | I7 → I4 | Panel demo: reloj "10:00" → **+48 h** → #110 aparece **escalado** + notificación | Tarea programada y asincronía; `Reloj` inyectado (DIP) | "Ejecutar control de SLA" sobre #111 |

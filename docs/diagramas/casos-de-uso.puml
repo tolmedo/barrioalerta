@@ -22,7 +22,6 @@ rectangle "BarrioAlerta" {
 
   package "Incidentes (vecino)" {
     usecase "Reportar incidente" as UC_Reportar
-    usecase "Ver duplicados cercanos" as UC_VerDup
     usecase "Adherir a incidente" as UC_Adherir
     usecase "Consultar mis reportes\ny su historial" as UC_MisReportes
     usecase "Confirmar resolución" as UC_Cerrar
@@ -33,7 +32,6 @@ rectangle "BarrioAlerta" {
   package "Gestión (operador)" {
     usecase "Validar / rechazar incidente" as UC_Validar
     usecase "Marcar duplicado" as UC_MarcarDup
-    usecase "Consultar ranking de prioridad" as UC_Ranking
     usecase "Asignar cuadrilla" as UC_Asignar
     usecase "Consultar propuestas\nde asignación" as UC_Propuestas
   }
@@ -46,14 +44,12 @@ rectangle "BarrioAlerta" {
 
   package "Administración" {
     usecase "Configurar tipos y SLA" as UC_Tipos
-    usecase "Configurar pesos de priorización" as UC_Pesos
     usecase "Gestionar cuadrillas" as UC_Cuadrillas
     usecase "Importar padrón de vecinos (CSV)" as UC_Importar
   }
 
   package "Procesos automáticos" {
     usecase "Escalar incidentes\ncon SLA vencido" as UC_Escalar
-    usecase "Cerrar resueltos\nsin reapertura (72 h)" as UC_AutoCierre
     usecase "Notificar interesados" as UC_Notificar
   }
 }
@@ -69,7 +65,6 @@ Vecino --> UC_Canal
 
 Operador --> UC_Validar
 Operador --> UC_MarcarDup
-Operador --> UC_Ranking
 Operador --> UC_Asignar
 
 Cuadrilla --> UC_Tareas
@@ -77,15 +72,11 @@ Cuadrilla --> UC_Iniciar
 Cuadrilla --> UC_Resolver
 
 Admin --> UC_Tipos
-Admin --> UC_Pesos
 Admin --> UC_Cuadrillas
 Admin --> UC_Importar
 
 Reloj --> UC_Escalar
-Reloj --> UC_AutoCierre
 
-UC_Reportar ..> UC_VerDup : <<include>>
-UC_Adherir .> UC_VerDup : <<extend>>
 UC_Asignar ..> UC_Propuestas : <<include>>
 UC_Escalar ..> UC_Notificar : <<include>>
 UC_Asignar ..> UC_Notificar : <<include>>

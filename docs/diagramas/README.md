@@ -9,7 +9,7 @@ Estado de cada diagrama:
 | Diagrama | Lo pide | Archivo | Dueño | Estado |
 |---|---|---|---|---|
 | Casos de uso (general) | E1 | [casos-de-uso.puml](casos-de-uso.puml) | I6 | Propuesto v0 |
-| Clases — Incidentes (núcleo) | E1–E4, "por servicio" | [clases-incidentes.md](clases-incidentes.md) | I1 + I2 | **Implementado** (dominio); estrategias concretas propuestas |
+| Clases — Incidentes (núcleo) | E1–E4, "por servicio" | [clases-incidentes.md](clases-incidentes.md) | I1 | **Implementado** |
 | Clases — Asignación | E1–E4 | [clases-asignacion.md](clases-asignacion.md) | I3 | Interfaces implementadas; concretas propuestas |
 | Clases — Notificaciones | E1–E4 | [clases-notificaciones.md](clases-notificaciones.md) | I4 | Propuesto |
 | Estados del incidente | E2 (figura del ciclo de vida) | [estados-incidente.md](estados-incidente.md) | I1 | **Implementado** y testeado (`tablaDeTransiciones.test.ts`) |

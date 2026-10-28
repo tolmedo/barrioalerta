@@ -24,7 +24,7 @@ export function Landing() {
           Reportá problemas de tu barrio y seguí su resolución
         </Typography>
         <Typography color="text.secondary">
-          Baches, luminarias apagadas, basurales o árboles caídos: el municipio los prioriza, asigna una cuadrilla
+          Baches, luminarias apagadas, basurales o árboles caídos: el municipio los valida, asigna una cuadrilla
           y te avisa en cada paso.
         </Typography>
       </Box>

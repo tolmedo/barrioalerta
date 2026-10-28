@@ -1,6 +1,6 @@
 # Diagrama de clases — Módulo Incidentes (núcleo)
 
-**Estado:** el dominio está implementado en `backend/src/incidentes/dominio`. Las estrategias concretas de priorización y el `DetectorDeDuplicados` son **propuestos** (H2, I2).
+**Estado:** implementado en `backend/src/incidentes/dominio`.
 
 Convenciones: `$` = estático, `*` = abstracto. `cambiarEstado` (y otros auxiliares que no se dibujan, como `asignarCuadrilla` o `liberarCuadrilla`) son públicos en TypeScript porque no existe la visibilidad de paquete, pero solo los llaman los estados; se controla en la revisión de cada PR.
 
@@ -14,7 +14,6 @@ class Incidente {
   -fechaReporte: Date
   -vencimientoSla: Date
   -nivelEscalamiento: number
-  -prioridad: number
   +reportar(tipo, descripcion, ubicacion, reportante, ahora)$ Incidente
   +adherir(vecino: Vecino, ahora: Date)
   +validar(operador: Usuario, ahora: Date)
@@ -28,7 +27,6 @@ class Incidente {
   +estaVencido(ahora: Date) boolean
   +debeEscalar(ahora: Date) boolean
   +escalar(ahora: Date)
-  +actualizarPrioridad(nuevaPrioridad: number)
   +accionesPermitidas() Set~Accion~
   +extraerEventos() EventoDominio[]
   +cambiarEstado(nuevo, actor, motivo, ahora)
@@ -123,9 +121,7 @@ class Ubicacion {
 }
 class TipoIncidente {
   nombre: string
-  gravedad: number
   slaHoras: number
-  radioDuplicadoMetros: number
 }
 class Vecino {
   nombre: string
@@ -142,7 +138,6 @@ class Usuario {
   <<módulo identidad>>
   username: string
   +tenesPermiso(permiso: Permiso) boolean
-  +esSistema() boolean
 }
 
 Incidente "*" --> "1" EstadoIncidente : estado
@@ -168,28 +163,6 @@ class EventoDominio {
 }
 Incidente ..> EventoDominio : registra
 
-class EstrategiaPriorizacion {
-  <<interface>>
-  +nombre: string
-  +puntuar(incidente: Incidente, contexto: ContextoPriorizacion) number
-}
-class PriorizacionPonderada {
-  <<propuesto H2>>
-  -pesoGravedad: number
-  -pesoAdhesiones: number
-  -pesoAntiguedad: number
-  -pesoZonaSensible: number
-}
-class PriorizacionPorRiesgoSla {
-  <<propuesto H2>>
-}
-class DetectorDeDuplicados {
-  <<propuesto H2>>
-  +candidatos(tipo, ubicacion, abiertos: Incidente[]) Incidente[]
-}
-EstrategiaPriorizacion <|.. PriorizacionPonderada
-EstrategiaPriorizacion <|.. PriorizacionPorRiesgoSla
-DetectorDeDuplicados ..> Incidente
 ```
 
 Los eventos (`EventoDominio`) son cuatro: `IncidenteReportado`, `EstadoIncidenteCambiado` (con estado anterior, nuevo y actor), `AdhesionRegistrada` (con el vecino) e `IncidenteEscalado` (con el nivel). Se distinguen por el campo `tipo`.

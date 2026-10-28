@@ -25,8 +25,8 @@ export const MIEMBRO_LUMINARIAS = new Usuario('cuadrilla.luminarias.1', ROL_CUAD
 export const ANA = new Vecino('Ana', new Usuario('vecina.ana', ROL_VECINO), 'Almagro', TipoCanal.WHATSAPP);
 export const BRUNO = new Vecino('Bruno', new Usuario('vecino.bruno', ROL_VECINO), 'Almagro', TipoCanal.EMAIL);
 
-export const BACHE = new TipoIncidente('Bache', 0.8, 48, 50);
-export const LUMINARIA = new TipoIncidente('Luminaria', 0.6, 72, 30);
+export const BACHE = new TipoIncidente('Bache', 48);
+export const LUMINARIA = new TipoIncidente('Luminaria', 72);
 
 export const MEDRANO_950 = new Ubicacion(-34.5986, -58.4202, 'Av. Medrano 950', 'Almagro');
 export const OBELISCO = new Ubicacion(-34.6037, -58.3816, 'Av. Corrientes y 9 de Julio', 'San Nicolás');

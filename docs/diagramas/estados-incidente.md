@@ -1,7 +1,7 @@
 # Diagrama de estados — Incidente
 
 **Estado:** implementado. Cada flecha es una fila de `TRANSICIONES` en
-`backend/test/incidentes/tablaDeTransiciones.test.ts`. Cualquier combinación estado × acción que no aparezca acá lanza `TransicionInvalidaException` (HTTP 409).
+`backend/test/incidentes/tablaDeTransiciones.test.ts`. Cualquier combinación estado × acción que no aparezca acá lanza `TransicionInvalidaError` (HTTP 409).
 
 ```mermaid
 stateDiagram-v2
@@ -17,7 +17,7 @@ stateDiagram-v2
 
   EnCurso --> Resuelto : resolver(evidencia) [miembro de la cuadrilla, foto obligatoria]
 
-  Resuelto --> Cerrado : cerrar() [vecino reportante o sistema]
+  Resuelto --> Cerrado : cerrar() [vecino reportante]
   Resuelto --> Validado : reabrir(motivo) [vecino reportante, dentro de 7 días]
 
   Rechazado --> [*]
@@ -43,4 +43,3 @@ stateDiagram-v2
 | Toda transición registra `CambioDeEstado(anterior, nuevo, actor, fecha, motivo)` y emite `EstadoIncidenteCambiado` | `Incidente.cambiarEstado` (único punto de cambio) |
 | Reabrir libera la cuadrilla asignada | `Resuelto.reabrir` |
 | El SLA vence a las `slaHoras` del reporte; escala como máximo una vez por período de SLA | `Incidente.estaVencido`, `debeEscalar`, `escalar` |
-| El cierre automático a las 72 h lo firma `Usuario.SISTEMA` | Job de cierre (H3) → `Incidente.cerrar` |

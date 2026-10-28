@@ -32,9 +32,10 @@ export class ContextoAsignacion {
 }
 
 /**
- * Segunda familia de Strategy, distinta de la priorización: acá el operador elige con qué criterio
- * se proponen cuadrillas. No confundir con State (C13): el incidente no cambia de algoritmo solo,
- * lo elige una persona.
+ * Patrón Strategy (C06 · PATRON STRATEGY): los dos algoritmos con puntaje entre 0 y 1 que pide la
+ * E2 del enunciado. Agregar un criterio nuevo es agregar una implementación, sin tocar las
+ * existentes (OCP). No confundir con State (C13): el incidente no cambia de algoritmo solo, lo
+ * elige el operador.
  *
  * Pendiente H2 (I3): AsignacionPorCercania y AsignacionPorMenorCarga.
  */

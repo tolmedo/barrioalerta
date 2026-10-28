@@ -26,7 +26,6 @@ export class Incidente {
   private _cuadrillaAsignada: Cuadrilla | null = null;
   private _original: Incidente | null = null;
   private _nivelEscalamiento = 0;
-  private _prioridad = 0;
   private readonly _historial: CambioDeEstado[] = [];
   private readonly _adhesiones: Adhesion[] = [];
   private readonly _evidencias: Evidencia[] = [];
@@ -123,10 +122,10 @@ export class Incidente {
     this._estado.reabrir(this, vecino, motivo, ahora);
   }
 
-  /** Lo cierra el vecino que reportó (confirmando la resolución) o el sistema por tiempo. */
+  /** Lo cierra el vecino que reportó, confirmando la resolución. */
   cerrar(actor: Usuario, ahora: Date): void {
-    if (!actor.esSistema() && !this.esReportante(actor)) {
-      throw new ReglaDeNegocioError('Solo quien reportó el incidente o el sistema pueden cerrarlo');
+    if (!this.esReportante(actor)) {
+      throw new ReglaDeNegocioError('Solo quien reportó el incidente puede cerrarlo');
     }
     this._estado.cerrar(this, actor, ahora);
   }
@@ -151,14 +150,6 @@ export class Incidente {
     }
     this._nivelEscalamiento++;
     this._eventos.push({ tipo: 'IncidenteEscalado', incidente: this, nivel: this._nivelEscalamiento, ocurridoEn: ahora });
-  }
-
-  /** La prioridad la calcula una EstrategiaPriorizacion y se guarda desnormalizada para el ranking. */
-  actualizarPrioridad(nuevaPrioridad: number): void {
-    if (nuevaPrioridad < 0 || nuevaPrioridad > 1) {
-      throw new Error('La prioridad debe estar entre 0 y 1');
-    }
-    this._prioridad = nuevaPrioridad;
   }
 
   accionesPermitidas(): ReadonlySet<Accion> {
@@ -247,10 +238,6 @@ export class Incidente {
 
   get nivelEscalamiento(): number {
     return this._nivelEscalamiento;
-  }
-
-  get prioridad(): number {
-    return this._prioridad;
   }
 
   get historial(): readonly CambioDeEstado[] {

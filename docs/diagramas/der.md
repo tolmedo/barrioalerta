@@ -47,9 +47,7 @@ erDiagram
   TIPO_INCIDENTE {
     bigint id PK
     varchar nombre UK
-    numeric gravedad "0..1"
     int sla_horas
-    int radio_duplicado_metros
   }
   CUADRILLA {
     bigint id PK
@@ -82,7 +80,6 @@ erDiagram
     timestamp vencimiento_sla
     varchar estado "DESNORMALIZADO: nombre del estado actual"
     int nivel_escalamiento
-    numeric prioridad "DESNORMALIZADO: cache del ranking"
     int cantidad_adhesiones "DESNORMALIZADO: contador"
   }
   CAMBIO_DE_ESTADO {
@@ -117,8 +114,8 @@ erDiagram
 | `estado` como `varchar`; al leer se reconstruye con `EstadoIncidente.desdeNombre` | Los estados son stateless: se persiste su nombre (apunte ORM, "mapeo de interfaces"). |
 | `Ubicacion` embebida (columnas `latitud`, `longitud`, `direccion`, `barrio`) en `INCIDENTE` y `CUADRILLA` | Es un Value Object sin identidad. |
 | `ADHESION` con PK compuesta (incidente, vecino) | La base garantiza la regla "nadie adhiere dos veces", además del dominio (validación en profundidad, C04). |
-| `estado`, `prioridad` y `cantidad_adhesiones` **desnormalizados** | El mapa y el ranking se leen mucho más de lo que se escriben. El agregado mantiene la consistencia en el mismo método que modifica. |
-| Índices: `incidente(estado)`, `incidente(latitud, longitud)`, `incidente(tipo_incidente_id, estado)`, `cambio_de_estado(incidente_id, orden)` | Consultas del mapa por caja delimitadora, de duplicados y del historial ordenado (RNF1). |
+| `estado` y `cantidad_adhesiones` **desnormalizados** | El mapa y la bandeja se leen mucho más de lo que se escriben. El agregado mantiene la consistencia en el mismo método que modifica. |
+| Índices: `incidente(estado)`, `incidente(latitud, longitud)`, `incidente(tipo_incidente_id, estado)`, `cambio_de_estado(incidente_id, orden)` | Consultas del mapa por caja delimitadora, de la bandeja por tipo y estado, y del historial ordenado. |
 | `CAMBIO_DE_ESTADO.orden` | Conserva el orden de la lista `historial` (pendiente del apunte ORM: "persistencia en orden de los elementos de una lista"). |
 | Sin herencia en tablas | `TipoIncidente` es un Type Object; no hay jerarquía que mapear. |
 

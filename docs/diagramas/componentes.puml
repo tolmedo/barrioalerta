@@ -12,11 +12,11 @@ package "Backend Node + Express (aplicación multimódulo)" {
   API - HTTP
 
   [Identidad\n(Usuario/Rol/Permiso, tokens)] as Identidad
-  [Incidentes\n(agregado, estados, priorización, cuadrillas)] as Incidentes
+  [Incidentes\n(agregado, estados, cuadrillas)] as Incidentes
   [Asignación\n(estrategias)] as Asignacion
   [Notificaciones\n(Facade, canales simulados)] as Notificaciones
   [Importación CSV\n(Template Method)] as Importacion
-  [Tarea programada\n(control de SLA, cierre a las 72 h)] as Planificador
+  [Tarea programada\n(control de SLA)] as Planificador
   [Demo\n(RelojDeDemo)] as Demo
   [Repositorios\n(ORM)] as Repos
 

@@ -6,7 +6,7 @@ import type { Vecino } from './vecino.js';
 /**
  * Algo relevante que le pasó a un incidente. El agregado los acumula y el servicio de aplicación
  * los publica después de guardar (Observer → suscripción a eventos, C10). Así el dominio no conoce
- * a quienes reaccionan (notificaciones, recálculo de prioridad).
+ * a quienes reaccionan (notificaciones).
  *
  * Se referencia al incidente (y no solo a su id) porque los eventos se crean antes de persistir,
  * cuando el id todavía no existe. El campo `tipo` permite distinguirlos con un switch.

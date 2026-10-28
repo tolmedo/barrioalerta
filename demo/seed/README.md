@@ -5,7 +5,7 @@ Pendiente H1–H3 (I7). Contenido previsto (lineamiento, sección 10.2):
 | Archivo | Contenido |
 |---|---|
 | `usuarios.csv` | 7 usuarios demo (`vecina.ana`, `vecino.bruno`, `operadora.carla`, `cuadrilla.norte.1`, `cuadrilla.luminarias.1`, `cuadrilla.sur.1`, `admin`). Contraseña de demo común; **no** se muestra en las slides. |
-| `tipos-incidente.csv` | Bache, Luminaria, Basural, Árbol caído, Vereda rota (gravedad, SLA, radio) |
+| `tipos-incidente.csv` | Bache, Luminaria, Basural, Árbol caído, Vereda rota (nombre y SLA) |
 | `cuadrillas.csv` | Norte, Luminarias, Sur (base, especialidades, miembros) |
 | `incidentes-activos.csv` | ~60 incidentes en todos los estados, incluidos #101–#104, #110 y #111 del guion |
 | `vecinos.csv` | Padrón de 10.000 vecinos, generado por script; se carga con el **propio importador CSV** (enunciado E1: importación masiva de más de 10.000 filas) |

@@ -1,7 +1,7 @@
 # BarrioAlerta
 
 Plataforma para gestionar reclamos de la vía pública (baches, luminarias, basurales, árboles caídos).
-Un vecino reporta con foto y ubicación, el municipio prioriza y asigna a una cuadrilla, y el vecino sigue el avance en un mapa.
+Un vecino reporta con foto y ubicación, el municipio lo valida y lo asigna a una cuadrilla, y el vecino sigue el avance en un mapa.
 
 TP integrador de **Diseño de Sistemas de Información** — UTN FRBA, 2026.
 El lineamiento completo del trabajo está en [`../LINEAMIENTO_TP_DSI.md`](../LINEAMIENTO_TP_DSI.md).
@@ -53,7 +53,7 @@ barrioalerta/
 │   │   ├── app.ts           raíz de composición: crea y conecta los objetos (inyección de dependencias)
 │   │   ├── compartido/      errores de dominio, reloj, manejo de errores HTTP
 │   │   ├── identidad/       usuarios, roles, permisos
-│   │   ├── incidentes/      agregado Incidente, estados (State), cuadrillas, priorización (Strategy)
+│   │   ├── incidentes/      agregado Incidente, estados (State), cuadrillas
 │   │   ├── asignacion/      estrategias de asignación de cuadrillas (Strategy); depende de incidentes
 │   │   └── demo/            reloj controlable para la demo
 │   └── test/
