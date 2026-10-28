@@ -54,7 +54,7 @@ barrioalerta/
 └── docker-compose.yml
 ```
 
-Módulos pendientes: `notificaciones/` (Observer, Facade, Adapter: email, SMS y WhatsApp simulados) e `importacion/` (CSV de más de 10.000 filas, Template Method).
+Pendientes: notificaciones (Observer, Facade, Adapter: email, SMS y WhatsApp simulados) e importación CSV de más de 10.000 filas (Template Method). Cada una va a tener sus archivos en las capas, por ejemplo services/notificacionService.ts y repositories/notificacionRepository.ts.
 
 ## Estado
 
