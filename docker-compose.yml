@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: barrioalerta-db
+    environment:
+      POSTGRES_DB: barrioalerta
+      POSTGRES_USER: barrioalerta
+      # Credencial solo para la base local de desarrollo y demo; no se usa en ningún otro entorno.
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-barrioalerta}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - barrioalerta-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U barrioalerta -d barrioalerta"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  barrioalerta-db:

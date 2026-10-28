@@ -1,0 +1,29 @@
+# Backend
+backend/target/
+backend/data/
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+
+# E2E
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+
+# Diagramas renderizados (se generan desde las fuentes)
+docs/diagramas/render/
+
+# IDE / SO
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Variables locales
+.env
+.env.local

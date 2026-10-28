@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: barrioalerta
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/barrioalerta
+    username: barrioalerta
+    # Base local de desarrollo (docker-compose.yml). No es una credencial de ningún entorno real.
+    password: ${DB_PASSWORD:barrioalerta}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    locations: classpath:db/migration
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+barrioalerta:
+  zona-horaria: America/Argentina/Buenos_Aires

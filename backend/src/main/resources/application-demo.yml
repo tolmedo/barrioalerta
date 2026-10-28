@@ -1,0 +1,5 @@
+# Perfil de la demo: reloj controlable, datos semilla y endpoints /api/demo/** (ver demo/guion.md).
+barrioalerta:
+  demo:
+    # Fecha y hora en la que arranca congelado el reloj. Vacío = hoy a las 10:00.
+    reloj-inicial: ""
