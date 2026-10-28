@@ -1,6 +1,6 @@
 # Datos semilla
 
-Pendiente H1–H3 (I7). Contenido previsto (lineamiento, sección 10.2):
+Pendiente H1–H3. Contenido previsto:
 
 | Archivo | Contenido |
 |---|---|
@@ -8,7 +8,7 @@ Pendiente H1–H3 (I7). Contenido previsto (lineamiento, sección 10.2):
 | `tipos-incidente.csv` | Bache, Luminaria, Basural, Árbol caído, Vereda rota (nombre y SLA) |
 | `cuadrillas.csv` | Norte, Luminarias, Sur (base, especialidades, miembros) |
 | `incidentes-activos.csv` | ~60 incidentes en todos los estados, incluidos #101–#104, #110 y #111 del guion |
-| `vecinos.csv` | Padrón de 10.000 vecinos, generado por script; se carga con el **propio importador CSV** (enunciado E1: importación masiva de más de 10.000 filas) |
+| `vecinos.csv` | Padrón de 10.000 vecinos, generado por script; se carga con el **propio importador CSV** |
 | `fotos/` | ~15 fotos livianas (< 300 KB) |
 
 Las fotos deben ser propias o con licencia libre.
