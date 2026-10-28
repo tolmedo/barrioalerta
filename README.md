@@ -34,7 +34,7 @@ Incluye la **tabla de transiciones del incidente**: cada flecha del diagrama de 
 
 ```
 barrioalerta/
-├── backend/        Node + Express, arquitectura en capas
+├── backend/                 Node + Express, arquitectura en capas
 │   ├── src/
 │   │   ├── app.ts           rutas y middlewares
 │   │   ├── server.ts        levanta el servidor (y el reloj de demo con --demo)
@@ -47,10 +47,10 @@ barrioalerta/
 │   │   ├── middlewares/     manejo de errores y rutas inexistentes
 │   │   └── utils/           reloj y reloj de demo
 │   └── tests/               domain/, utils/, integration/
-├── frontend/       React + Vite + MUI
+├── frontend/                React + Vite + MUI
 │   └── src/                 api/, hooks/, pages/, components/, styles/, utils/
-├── docs/           justificaciones de diseño y diagramas
-├── demo/           guion, checklist, ensayos, seed, script de reset
+├── docs/                    justificaciones de diseño y diagramas
+├── demo/                    guion, checklist, ensayos, seed, script de reset
 └── docker-compose.yml
 ```
 
