@@ -13,8 +13,6 @@
 
 ## 2. Alcance
 
-### 2.1 Qué entra
-
 | # | Funcionalidad |
 |---|---|
 | M1 | Login con roles (Vecino, Operador, Cuadrilla, Admin) y acceso rápido con usuarios demo |
