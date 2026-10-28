@@ -22,24 +22,10 @@ El lineamiento completo del trabajo está en [`LINEAMIENTO_TP_DSI.md`](LINEAMIEN
   - Docker Desktop (`docker compose up -d`), que necesita WSL 2 habilitado.
 - **MongoDB 8 Community** (para las notificaciones), sin usuario ni contraseña, en el puerto 27017. Nativo (instalador oficial para Windows, como servicio) o con el mismo `docker compose up -d`.
 
-## Cómo levantarlo
-
-```bash
-cd backend && npm install && npm run dev
-```
-
-```bash
-cd frontend && npm install && npm run dev
-```
-
-- Front: http://localhost:5173 (las llamadas a `/api` se redirigen al backend).
-- API: http://localhost:8080/api/salud → `Hola desde BarrioAlerta`.
-- Modo demo (reloj congelado a las 10:00, avanza solo cuando se le pide): `npm run demo` en `backend/`.
-
 ## Tests
 
 ```bash
-cd backend && npm test
+npm test
 ```
 
 Incluye la **tabla de transiciones del incidente**: cada flecha del diagrama de estados es un caso de test, y cada combinación estado × acción que no está en el diagrama se verifica que sea rechazada.
