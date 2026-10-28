@@ -1,9 +1,5 @@
 # Guion de la demo (borrador v0)
 
-**Dueño:** I7. Fuente: sección 10.1 del lineamiento. **Objetivo:** 12 minutos + 3 de margen. Todo se construye para este guion; si una funcionalidad no aparece acá, no es prioridad.
-
-> **Regla:** si un paso falla, **no se reintenta en vivo**. Se sigue desde el incidente de respaldo, que ya está en el estado siguiente.
-
 | Tiempo | Quién | Acción exacta | Qué se dice (concepto) | Respaldo si falla |
 |---|---|---|---|---|
 | 0:00–1:00 | I1 | Slide del problema → landing pública con el mapa | Problema, actores, propuesta | Slide con captura del mapa |
@@ -16,7 +12,7 @@
 | 9:30–10:45 | I7 → I4 | Panel demo: reloj "10:00" → **+48 h** → #110 aparece **escalado** + notificación | Tarea programada y asincronía; `Reloj` inyectado (DIP) | "Ejecutar control de SLA" sobre #111 |
 | 10:45–12:00 | I6 | Tests verdes (la tabla de transiciones) y resultados de las pruebas con usuarios | U8: verificación vs validación | Capturas en la slide |
 | 12:00–12:30 | I1 | Cierre y evolución | — | — |
-| 12:30–15:00 | Todos | Preguntas: responde el dueño del tema (sección 9 del lineamiento) | — | — |
+| 12:30–15:00 | Todos | Tolerancia | — | — |
 
 ## Datos que tiene que garantizar el seed
 
