@@ -1,8 +1,8 @@
-# Diagrama de clases — Módulo Incidentes (núcleo)
+# Diagrama de clases — Módulo Incidentes
 
 **Estado:** implementado en `backend/src/incidentes/dominio`.
 
-Convenciones: `$` = estático, `*` = abstracto. `cambiarEstado` (y otros auxiliares que no se dibujan, como `asignarCuadrilla` o `liberarCuadrilla`) son públicos en TypeScript porque no existe la visibilidad de paquete, pero solo los llaman los estados; se controla en la revisión de cada PR.
+Convenciones: `$` = estático, `*` = abstracto. `cambiarEstado` (y otros auxiliares que no se dibujan, como `asignarCuadrilla` o `liberarCuadrilla`) son públicos en TypeScript porque no existe la visibilidad de paquete, pero solo los llaman los estados.
 
 ```mermaid
 classDiagram
@@ -169,7 +169,7 @@ Los eventos (`EventoDominio`) son cuatro: `IncidenteReportado`, `EstadoIncidente
 
 ## Decisiones que muestra este diagrama
 
-- **State** (C03): `Incidente` delega en `EstadoIncidente`. La clase abstracta rechaza todas las acciones por defecto y cada estado redefine solo las que admite. Los estados no tienen atributos (instancia única) y se guardan por nombre (`desdeNombre`).
+- **State**: `Incidente` delega en `EstadoIncidente`. La clase abstracta rechaza todas las acciones por defecto y cada estado redefine solo las que admite. Los estados no tienen atributos (instancia única) y se guardan por nombre (`desdeNombre`).
 - **Auditoría obligatoria**: `cambiarEstado` es el único método que modifica el estado, y siempre agrega un `CambioDeEstado` con actor.
 - **Type Object** en lugar de herencia: `TipoIncidente` es configurable. No hay subclases `Bache`, `Luminaria`, etc.
 - **`Cuadrilla` vive en este módulo** porque `Incidente` la referencia. Así el módulo Asignación depende de Incidentes y no al revés.
