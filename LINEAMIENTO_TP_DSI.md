@@ -103,7 +103,7 @@ Están en [`docs/diagramas/`](docs/diagramas/README.md).
 ## 7. Plan por hitos
 
 | Hito | Objetivo | Terminado cuando |
-|---|---|---|---|
+|---|---|---|
 | **H0 — Concepción** | Diagramas v0, bocetos de baja fidelidad, repo y CI | --- |
 | **H1 — Recorrido completo** | Reportar → validar → asignar (manual) → iniciar → resolver → cerrar, con PostgreSQL, login con token y mapa | --- |
 | **H2 — Algoritmos y gestión** | 2 estrategias de asignación + modal de propuestas; sumarse desde el mapa; ABM de tipos y cuadrillas | Las dos estrategias proponen cuadrillas distintas para el mismo incidente |
