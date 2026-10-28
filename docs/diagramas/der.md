@@ -1,6 +1,8 @@
-# DER físico (PostgreSQL) — propuesta v0
+# Modelo de datos físico — propuesta v0
 
-**Estado:** propuesto (H1, I7 + I1). Se materializa con las migraciones del ORM que se elija en H1.
+**Estado:** propuesto (H1, I7 + I1). Persistencia políglota, como pide la E4: todo en PostgreSQL con ORM, salvo Notificaciones, que va en MongoDB con ODM (al final de este archivo).
+
+## PostgreSQL
 
 ```mermaid
 erDiagram
@@ -20,7 +22,6 @@ erDiagram
   INCIDENTE ||--o{ ADHESION : recibe
   VECINO ||--o{ ADHESION : realiza
   INCIDENTE ||--o{ EVIDENCIA : tiene
-  USUARIO ||--o{ NOTIFICACION : recibe
 
   ROL {
     bigint id PK
@@ -107,14 +108,6 @@ erDiagram
     bigint autor_id FK
     timestamp fecha
   }
-  NOTIFICACION {
-    bigint id PK
-    bigint destinatario_id FK
-    varchar canal "enum TipoCanal"
-    text mensaje
-    timestamp fecha
-    boolean leida
-  }
 ```
 
 ## Decisiones de mapeo (apunte ORM)
@@ -128,3 +121,27 @@ erDiagram
 | Índices: `incidente(estado)`, `incidente(latitud, longitud)`, `incidente(tipo_incidente_id, estado)`, `cambio_de_estado(incidente_id, orden)` | Consultas del mapa por caja delimitadora, de duplicados y del historial ordenado (RNF1). |
 | `CAMBIO_DE_ESTADO.orden` | Conserva el orden de la lista `historial` (pendiente del apunte ORM: "persistencia en orden de los elementos de una lista"). |
 | Sin herencia en tablas | `TipoIncidente` es un Type Object; no hay jerarquía que mapear. |
+
+## MongoDB — colección `notificaciones` (módulo Notificaciones)
+
+Un documento por notificación enviada. Se guarda con Mongoose (ODM).
+
+```json
+{
+  "_id": "ObjectId",
+  "destinatario": { "username": "vecina.ana", "nombre": "Ana" },
+  "canal": "WHATSAPP",
+  "mensaje": "Tu reclamo #101 fue asignado a la cuadrilla Norte",
+  "incidente": { "id": 101, "tipo": "Bache", "estado": "ASIGNADO" },
+  "evento": "EstadoIncidenteCambiado",
+  "fecha": "2026-12-07T13:05:00Z",
+  "leida": false
+}
+```
+
+| Decisión | Justificación |
+|---|---|
+| Base documental para Notificaciones (pregunta de discusión de la E4) | Cada notificación es un registro independiente que solo se agrega y se lee por destinatario; no participa de relaciones que haya que mantener íntegras. |
+| Destinatario e incidente **copiados** dentro del documento (no referencias) | La campana muestra la notificación sin consultar PostgreSQL. Es una foto del momento del envío: si el incidente cambia después, la notificación no debe cambiar. |
+| Índice `{ "destinatario.username": 1, "leida": 1, "fecha": -1 }` | Consulta de la campana: no leídas de un usuario, las más nuevas primero. |
+| Sin claves foráneas hacia PostgreSQL | Es el costo de separar bases: la consistencia la cuida el servicio de aplicación, que crea la notificación a partir del evento. |

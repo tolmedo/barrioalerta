@@ -62,7 +62,7 @@ class BandejaDeSimulacion {
   +enviadas() Notificacion[]
 }
 class RepositorioNotificaciones {
-  <<interface>>
+  <<interface · Mongoose/MongoDB>>
   +guardar(notificacion: Notificacion)
   +noLeidasDe(usuario: Usuario) Notificacion[]
 }
@@ -88,4 +88,5 @@ CanalWhatsAppSimulado --> BandejaDeSimulacion
 - **Facade** (C06): `ServicioNotificaciones` es el único punto de entrada. Los listeners no saben de canales ni de plantillas.
 - **Adapter** (C06): los canales simulados tienen la misma interfaz que tendría un proveedor real. Para pasar a WhatsApp real alcanza con otra implementación de `CanalNotificacion`.
 - **Simple Factory** (C06, mismo ejemplo `NotificadorFactory` de la clase): la elección del canal según la preferencia del vecino está en un solo lugar.
+- **Persistencia en MongoDB** (E4, persistencia políglota): `RepositorioNotificaciones` se implementa con Mongoose. El documento está en [der.md](der.md).
 - In-app siempre se envía; además se usa el canal preferido del vecino si es distinto.

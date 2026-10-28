@@ -10,14 +10,17 @@ El lineamiento completo del trabajo está en [`../LINEAMIENTO_TP_DSI.md`](../LIN
 
 | Capa | Tecnología |
 |---|---|
-| Backend | Node.js 22 · TypeScript · Express 5 · PostgreSQL 16 |
+| Backend | Node.js 22 · TypeScript · Express 5 · PostgreSQL 16 · MongoDB 8 (notificaciones) |
 | Frontend | React · TypeScript · Vite · MUI (Material Design) · react-leaflet |
 | Tests | Vitest · Supertest |
 
 ## Requisitos
 
 - **Node.js 22** (o ≥ 20.19).
-- **PostgreSQL 16**, con base, usuario y contraseña `barrioalerta`. Se puede instalar nativo (instalador oficial para Windows) o levantar con Docker Desktop (`docker compose up -d`). Docker Desktop necesita WSL 2 habilitado.
+- **PostgreSQL 16**, con base, usuario y contraseña `barrioalerta`. Dos opciones:
+  - nativo (instalador oficial para Windows), y después crear la base con [`backend/db/crear-base.sql`](backend/db/crear-base.sql);
+  - Docker Desktop (`docker compose up -d`), que necesita WSL 2 habilitado.
+- **MongoDB 8 Community** (para las notificaciones), sin usuario ni contraseña, en el puerto 27017. Nativo (instalador oficial para Windows, como servicio) o con el mismo `docker compose up -d`.
 
 ## Cómo levantarlo
 

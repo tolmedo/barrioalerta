@@ -39,15 +39,16 @@ package "Backend Node + Express (aplicación multimódulo)" {
   Planificador ..> Incidentes
   Incidentes ..> Identidad
   Incidentes ..> Repos
-  Notificaciones ..> Repos
   Identidad ..> Repos
 }
 
 database "PostgreSQL 16" as DB
+database "MongoDB 8\n(notificaciones)" as Mongo
 folder "Fotos\n(./data/fotos)" as Fotos
 
 SPA ..> HTTP
-Repos ..> DB
+Repos ..> DB : ORM
+Notificaciones ..> Mongo : ODM (Mongoose)
 Incidentes ..> Fotos
 
 note bottom of Asignacion

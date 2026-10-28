@@ -10,6 +10,7 @@ node "Notebook 1 (principal)" <<device>> {
       artifact "backend (Express, modo demo,\nsirve también la SPA)" as API1
     }
     database "PostgreSQL 16" as DB1
+    database "MongoDB 8" as Mongo1
     folder "data/fotos" as Archivos1
   }
 }
@@ -22,6 +23,7 @@ node "Proyector" <<device>> as Proyector
 
 SPA1 --> API1 : HTTP :8080 (mismo origen)
 API1 --> DB1 : TCP :5432
+API1 --> Mongo1 : TCP :27017
 API1 --> Archivos1 : lectura/escritura
 Proyector -- "Notebook 1 (principal)" : HDMI
 note right of Espejo

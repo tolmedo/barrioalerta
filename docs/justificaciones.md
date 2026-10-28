@@ -11,9 +11,5 @@ Es el entregable "Justificaciones de Diseño" que pide el enunciado en las entre
 | **Eventos de dominio** para notificar | El incidente no conoce a Notificaciones; un canal que falla no revierte la operación | Si el proceso se cae entre guardar y notificar, se pierde un aviso. La evolución es Transactional Outbox (bonus de la E6). |
 | **Reloj inyectado** (`Reloj`, y `RelojDeDemo` en la demo) | La demo es determinística: el SLA vence cuando lo decidimos, no porque pasó el tiempo real | Hay que pasar `ahora` como parámetro a los métodos del dominio. |
 | **TypeScript** en back y front | Un solo lenguaje para los 7 integrantes; los tipos e interfaces permiten mostrar que el código coincide con el diagrama de clases | Menos ejemplos de la cátedra para reutilizar, porque el material está en Java. |
-
+| **Persistencia políglota** (E4): Notificaciones en MongoDB con Mongoose; el resto en PostgreSQL con ORM | Cada notificación es un documento independiente que se agrega y se lee por destinatario; la campana se arma sin consultar PostgreSQL | Una base más que tiene que estar levantada en la demo, y sin claves foráneas entre las dos bases. Es la pregunta de discusión de la E4. |
 | **SPA React** en lugar de motor de plantillas (E5 pide SSR; aceptado por el docente) | Interactividad del mapa, del ranking y del asistente de reporte; la API REST es el único contrato | Primera carga y SEO, que no aplican a una herramienta con login. Es la pregunta de discusión de la E5. |
-
-## Decisiones pendientes
-
-- **Persistencia políglota** (E4 pide un servicio en base documental): proponemos Notificaciones en MongoDB y el resto en PostgreSQL.
