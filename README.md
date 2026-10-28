@@ -4,7 +4,7 @@ Plataforma para gestionar reclamos de la vía pública (baches, luminarias, basu
 Un vecino reporta con foto y ubicación, el municipio lo valida y lo asigna a una cuadrilla, y el vecino sigue el avance en un mapa.
 
 TP integrador de **Diseño de Sistemas de Información** — UTN FRBA, 2026.
-El lineamiento completo del trabajo está en [`../LINEAMIENTO_TP_DSI.md`](../LINEAMIENTO_TP_DSI.md).
+El lineamiento completo del trabajo está en [`LINEAMIENTO_TP_DSI.md`](LINEAMIENTO_TP_DSI.md).
 
 ## Stack
 
