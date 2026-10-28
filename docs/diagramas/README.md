@@ -15,7 +15,7 @@ Estado de cada diagrama:
 | Despliegue | [despliegue.puml](despliegue.puml) | Propuesto v0 |
 | DER físico | [der.md](der.md) | Propuesto v0 |
 
-El diagrama de clases de Importación (Template Method) se agrega en H3, junto con el código. Las justificaciones de diseño están en [diagramas/justificaciones.md](diagramas/justificaciones.md).
+El diagrama de clases de Importación (Template Method) se agrega en H3, junto con el código. Las justificaciones de diseño están en [../justificaciones.md](../justificaciones.md).
 
 ## Cómo verlos
 
