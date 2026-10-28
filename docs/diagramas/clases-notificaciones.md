@@ -1,8 +1,6 @@
 # Diagrama de clases — Módulo Notificaciones
 
-**Estado:** propuesto (H3, I4). Este módulo depende de Incidentes, porque escucha sus eventos. Incidentes **no** lo conoce.
-
-Enunciado E1: "dado un destinatario, un mensaje y un medio de notificación (correo electrónico, SMS y WhatsApp)", primero simulado.
+**Estado:** propuesto. Este módulo depende de Incidentes, porque escucha sus eventos. Incidentes **no** lo conoce.
 
 ```mermaid
 classDiagram
@@ -84,9 +82,9 @@ CanalWhatsAppSimulado --> BandejaDeSimulacion
 
 ## Decisiones
 
-- **Observer → suscripción a eventos** (C10). El servicio de aplicación publica los eventos recién después de guardar el incidente, y el envío no bloquea la respuesta. Si un canal falla, la operación del operador no se revierte (D7).
-- **Facade** (C06): `ServicioNotificaciones` es el único punto de entrada. Los listeners no saben de canales ni de plantillas.
-- **Adapter** (C06): los canales simulados tienen la misma interfaz que tendría un proveedor real. Para pasar a WhatsApp real alcanza con otra implementación de `CanalNotificacion`.
-- **Simple Factory** (C06, mismo ejemplo `NotificadorFactory` de la clase): la elección del canal según la preferencia del vecino está en un solo lugar.
-- **Persistencia en MongoDB** (E4, persistencia políglota): `RepositorioNotificaciones` se implementa con Mongoose. El documento está en [der.md](der.md).
+- **Observer → suscripción a eventos**. El servicio de aplicación publica los eventos recién después de guardar el incidente, y el envío no bloquea la respuesta. Si un canal falla, la operación del operador no se revierte.
+- **Facade**: `ServicioNotificaciones` es el único punto de entrada. Los listeners no saben de canales ni de plantillas.
+- **Adapter**: los canales simulados tienen la misma interfaz que tendría un proveedor real. Para pasar a WhatsApp real alcanza con otra implementación de `CanalNotificacion`.
+- **Simple Factory**: la elección del canal según la preferencia del vecino está en un solo lugar.
+- **Persistencia en MongoDB**: `RepositorioNotificaciones` se implementa con Mongoose. El documento está en [der.md](der.md).
 - In-app siempre se envía; además se usa el canal preferido del vecino si es distinto.
