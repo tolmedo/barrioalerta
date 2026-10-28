@@ -1,85 +1,37 @@
 # Lineamiento del TP Integrador — BarrioAlerta
 
 **Materia:** Diseño de Sistemas de Información (DSI) — UTN FRBA, Plan 23 · **Año:** 2026
-**Grupo:** 7 integrantes (I1…I7) · **Stack:** TypeScript (Node + Express en el back, React en el front) · **Entrega objetivo:** diciembre 2026 (febrero como colchón)
-**Versión:** 2.1 — 28/10/2026. Se recortó la v1 para seguir lo que pide el enunciado, sin agregados. En la 2.1 salen la priorización, la detección automática de duplicados y el cierre automático.
-
-> **Cómo leer este documento.** Cada afirmación sobre "lo que se pide" está etiquetada:
-> - **[Cátedra]** — condiciones comunicadas por la cátedra (WhatsApp) o que figuran en el material oficial.
-> - **[Enunciado]** — lo que pide el TP Anual de referencia (DonaTrack, `Cátedra Diseño de Sistemas de Información - TP Anual 2026 (L, M, M) .docx`). El grupo hace un TP propio, así que se usa como guía de qué entregar y cómo.
-> - **[Recomendación]** — decisión propuesta acá; es discutible y hay que defenderla.
->
-> Las citas al material usan el formato `(Cxx · archivo)`, donde Cxx es la carpeta `MATERIAL CLASES/CLASE xx`.
+**Stack:** TypeScript (Node + Express en el back, React en el front)
 
 ---
 
 ## 1. Resumen
 
-**BarrioAlerta** es una plataforma web para gestionar reclamos de la vía pública (baches, luminarias apagadas, basurales, árboles caídos). Un **vecino** reporta el problema con foto y ubicación en un mapa; si ya existe el mismo reclamo en el mapa, se *suma* a él en lugar de duplicarlo. Un **operador municipal** lo valida y lo asigna a una **cuadrilla** con ayuda de un algoritmo. La cuadrilla lo resuelve con una foto de evidencia y el vecino recibe notificaciones en cada paso. Cada tipo de reclamo tiene un **plazo de atención (SLA)**: una tarea programada detecta los vencidos y los escala.
-
-Tiene la misma forma que DonaTrack (un ciclo de vida con estados, dos algoritmos de asignación con puntaje, notificaciones por varios medios, importación masiva por CSV, tarea programada, mapa), así que cada entrega del enunciado tiene su equivalente directo (sección 2).
+**BarrioAlerta** es una plataforma web para gestionar reclamos de la vía pública (baches, luminarias apagadas, basurales, árboles caídos). Un **vecino** reporta el problema con foto y ubicación en un mapa. Un **operador municipal** lo valida y lo asigna a una **cuadrilla** con ayuda de un algoritmo. La cuadrilla lo resuelve con una foto de evidencia y el vecino recibe notificaciones en cada paso. Cada tipo de reclamo tiene un **plazo de atención (SLA)**: una tarea programada detecta los vencidos y los escala.
 
 ---
 
-## 2. Qué pide el enunciado y qué hacemos
+## 2. Alcance
 
-| Entrega | Lo que pide **[Enunciado]** | En BarrioAlerta |
+### 2.1 Qué entra
+
+| # | Funcionalidad |
 |---|---|---|
-| **E1** — Modelado I + UI | Aplicación multimódulo; endpoint `GET` que responde "Hola desde…" | Backend con módulos por carpeta; `GET /api/salud` → "Hola desde BarrioAlerta" ✔ |
-| | Gestión de las entidades principales | Vecinos, incidentes, tipos de incidente, cuadrillas |
-| | Importación masiva por CSV (> 10.000 filas), creando el usuario si no existe | Importación del **padrón de vecinos** (Template Method) |
-| | Notificador simulado: destinatario + mensaje + medio (email, SMS, WhatsApp) | Módulo Notificaciones con canales simulados (Adapter) |
-| | Bocetos de UI | Bocetos de las pantallas del guion |
-| | Entregables: clases por servicio, despliegue y componentes, casos de uso general, justificaciones | Ver sección 6 |
-| **E2** — Modelado II | Trazabilidad de estados (diagrama de estados de la donación) | Ciclo de vida del incidente con **State** + historial auditado ✔ |
-| | Dos algoritmos con puntaje entre 0 y 1, extensibles | Dos estrategias de **asignación** de cuadrilla (Strategy): por cercanía y por menor carga |
-| | Ejecución en horarios de baja carga | **Tarea programada** de control de SLA |
-| | Notificaciones ante cambios de estado; API REST | Eventos de dominio → notificaciones; API REST |
-| | Publicación automática en redes sociales | No aplica al dominio |
-| **E3** — Modelado III | Notificaciones asincrónicas por **cola de mensajes** | Eventos asincrónicos en el mismo proceso (ver Anexo A4) |
-| | Seguimiento en tiempo real, callback de proveedor externo, lotes de 100 | No aplica: las cuadrillas tienen base fija y no hay proveedor externo |
-| **E4** — Persistencia + maquetado | Relacional con **ORM**; un servicio en base documental con **ODM**; desnormalización; DER físico | PostgreSQL + ORM; Notificaciones en MongoDB con Mongoose como ODM; `estado` y `cantidad_adhesiones` desnormalizados |
-| | Maquetado con criterios de UI (Material Design, WCAG AA, 48 px, toasts, loaders > 300 ms, profundidad ≤ 3) | Front con MUI siguiendo esa lista (sección 7) |
-| **E5** — MVC web | Cliente liviano desacoplado con **motor de plantillas**; servicio de autenticación con tokens | SPA React (aceptada por el docente, Anexo A2); login con token |
-| **E6** — Despliegue y observabilidad | Deploy en la nube, observabilidad, rate limiting, gRPC o GraphQL | Fuera: **[Cátedra]** no pide deploy. Se entrega el diagrama de despliegue |
-
-**Preguntas de discusión del enunciado** (las preparamos todos, sección 11): modelo rico vs anémico (E1), tiempo real vs batch (E2), NoSQL vs relacional (E4) y SPA vs SSR (E5).
+| M1 | Login con roles (Vecino, Operador, Cuadrilla, Admin) y acceso rápido con usuarios demo |
+| M2 | Reportar incidente: tipo, pin en el mapa, foto, descripción |
+| M3 | Sumarse a un reclamo existente desde el mapa; el operador marca duplicados a mano |
+| M4 | Ciclo de vida con **State** + historial (quién, qué, cuándo, motivo) |
+| M6 | Propuestas de asignación de cuadrilla con 2 estrategias (cercanía / menor carga) |
+| M7 | Vista de cuadrilla: iniciar y resolver con foto |
+| M8 | Notificaciones por eventos: in-app + email, SMS y WhatsApp simulados |
+| M9 | SLA por tipo + tarea programada de escalamiento, con **reloj de demo** |
+| M10 | Mapa público (sin datos personales) y mapa operativo |
+| M11 | Importación del padrón de vecinos por CSV (10.000 filas) |
+| M12 | Panel admin: tipos de incidente y SLA, cuadrillas, bandeja de notificaciones simuladas |
 
 ---
 
-## 3. Alcance
-
-### 3.1 Qué entra
-
-| # | Funcionalidad | Entrega equivalente |
-|---|---|---|
-| M1 | Login con roles (Vecino, Operador, Cuadrilla, Admin) y acceso rápido con usuarios demo | E5 |
-| M2 | Reportar incidente: tipo, pin en el mapa, foto, descripción | E1 |
-| M3 | Sumarse a un reclamo existente desde el mapa; el operador marca duplicados a mano | — (propio del dominio) |
-| M4 | Ciclo de vida con **State** + historial (quién, qué, cuándo, motivo) | E2 |
-| M6 | Propuestas de asignación de cuadrilla con 2 estrategias (cercanía / menor carga) | E2 |
-| M7 | Vista de cuadrilla: iniciar y resolver con foto | E2 |
-| M8 | Notificaciones por eventos: in-app + email, SMS y WhatsApp simulados | E1–E3 |
-| M9 | SLA por tipo + tarea programada de escalamiento, con **reloj de demo** | E2 |
-| M10 | Mapa público (sin datos personales) y mapa operativo | E1 (requerimientos de UI) |
-| M11 | Importación del padrón de vecinos por CSV (10.000 filas) | E1 |
-| M12 | Panel admin: tipos de incidente y SLA, cuadrillas, bandeja de notificaciones simuladas | E1 |
-
-### 3.2 Qué queda afuera
-
-| Afuera | Por qué |
-|---|---|
-| Deploy, observabilidad, rate limiting, gRPC/GraphQL | **[Cátedra]** corre local. Agregan riesgo sin sumar a la demo |
-| Notificaciones reales | Requieren internet y credenciales; se simulan detrás de un Adapter, como pide la E1 |
-| Microservicios | Ver D2 |
-| Seguimiento en tiempo real, app móvil, SSO | No aplican o dependen de servicios externos |
-| Priorización de reclamos, detección automática de duplicados, cierre automático | El enunciado no los pide; se sacaron el 28/10 para achicar el alcance |
-
-> **Regla [Recomendación]:** nada entra si no está en esta tabla. Lo que sobre de tiempo va a ensayos, no a funcionalidades.
-
----
-
-## 4. Actores y requerimientos
+## 3. Actores y requerimientos
 
 | Actor | Qué hace |
 |---|---|
@@ -90,24 +42,24 @@ Tiene la misma forma que DonaTrack (un ciclo de vida con estados, dos algoritmos
 | **Administrador** | Configura tipos y SLA, cuadrillas; importa el padrón de vecinos |
 | **Reloj** (secundario) | Escala los incidentes con el SLA vencido |
 
-Operador y Administrador no son clases de dominio: son un `Usuario` con un rol (`C04 · MVC, Patrón Repositorio, Modelado de Usuarios, roles y permisos`).
+Operador y Administrador no son clases de dominio: son un `Usuario` con un rol.
 
-**Requerimientos no funcionales** (`C13 · Errores mas comunes`: "un RNF sin métrica no es verificable"):
+**Requerimientos no funcionales**:
 
-| ID | Característica ISO 25010 | Requerimiento | Cómo se verifica |
-|---|---|---|---|
-| RNF1 | Fiabilidad | El guion de la demo corre 3 veces seguidas sin falla en cada máquina | Planilla de ensayos |
-| RNF2 | Recuperabilidad | El entorno de demo se restaura en < 60 s con un comando | Cronometrado |
-| RNF3 | Usabilidad | Reportar un incidente toma ≤ 3 pasos y < 60 s para alguien nuevo | Prueba con 3 personas externas al grupo |
-| RNF4 | Accesibilidad | Pantallas del vecino con WCAG AA; Lighthouse ≥ 90 | Lighthouse (viene en Chrome) |
-| RNF5 | Seguridad | Toda transición registra actor y fecha; un rol sin permiso recibe 403 | Tests |
-| RNF6 | Mantenibilidad | Agregar una estrategia nueva no modifica clases existentes | Mostrarlo en el código |
+| Característica ISO 25010 | Requerimiento |
+|---|---|
+| Fiabilidad | El guion de la demo corre 3 veces seguidas sin falla en cada máquina |
+| Recuperabilidad | El entorno de demo se restaura en < 60 s con un comando |
+| Usabilidad | Reportar un incidente toma ≤ 3 pasos y < 60 s para alguien nuevo |
+| Accesibilidad | Pantallas del vecino con WCAG AA; Lighthouse ≥ 90 |
+| Seguridad | Toda transición registra actor y fecha; un rol sin permiso recibe 403 |
+| Mantenibilidad | Agregar una estrategia nueva no modifica clases existentes |
 
 ---
 
-## 5. Decisiones de diseño
+## 4. Decisiones de diseño
 
-El resumen con ventajas y costos de cada una está en [`barrioalerta/docs/justificaciones.md`](barrioalerta/docs/justificaciones.md), que es el entregable "Justificaciones de Diseño".
+El resumen con ventajas y costos de cada una está en [`docs/justificaciones.md`](docs/justificaciones.md), que es el entregable "Justificaciones de Diseño".
 
 - **D1. Modelo de dominio rico** en el agregado `Incidente`: las reglas de cada estado viven en el dominio y los servicios solo orquestan. Responde la pregunta de discusión de la E1.
 - **D2. Aplicación multimódulo en un solo proceso** (lo que pide la E1), no microservicios: para una demo en 1–2 notebooks, varios procesos son más puntos de falla (`C21 · Clase_21_…_Microservicios`: conviene con gran escalabilidad o muchos subdominios, que no es el caso).
