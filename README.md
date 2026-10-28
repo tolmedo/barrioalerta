@@ -34,16 +34,21 @@ Incluye la **tabla de transiciones del incidente**: cada flecha del diagrama de 
 
 ```
 barrioalerta/
-├── backend/        Node + Express (aplicación multimódulo)
+├── backend/        Node + Express, arquitectura en capas
 │   ├── src/
-│   │   ├── app.ts           raíz de composición: crea y conecta los objetos (inyección de dependencias)
-│   │   ├── compartido/      errores de dominio, reloj, manejo de errores HTTP
-│   │   ├── identidad/       usuarios, roles, permisos
-│   │   ├── incidentes/      agregado Incidente, estados (State), cuadrillas
-│   │   ├── asignacion/      estrategias de asignación de cuadrillas (Strategy); depende de incidentes
-│   │   └── demo/            reloj controlable para la demo
-│   └── test/
+│   │   ├── app.ts           rutas y middlewares
+│   │   ├── server.ts        levanta el servidor (y el reloj de demo con --demo)
+│   │   ├── routes/          endpoints por recurso
+│   │   ├── controllers/     leen el pedido HTTP y llaman al servicio
+│   │   ├── services/        casos de uso: orquestan modelos y repositorios
+│   │   ├── repositories/    acceso a PostgreSQL (ORM) y MongoDB (Mongoose)
+│   │   ├── models/          dominio: Incidente, estados (State), cuadrillas, estrategias (Strategy)
+│   │   ├── errors/          AppError y sus subclases con código HTTP
+│   │   ├── middlewares/     manejo de errores y rutas inexistentes
+│   │   └── utils/           reloj y reloj de demo
+│   └── tests/               domain/, utils/, integration/
 ├── frontend/       React + Vite + MUI
+│   └── src/                 api/, hooks/, pages/, components/, styles/, utils/
 ├── docs/           justificaciones de diseño y diagramas
 ├── demo/           guion, checklist, ensayos, seed, script de reset
 └── docker-compose.yml
