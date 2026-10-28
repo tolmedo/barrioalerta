@@ -51,20 +51,13 @@ barrioalerta/
 
 Módulos pendientes: `notificaciones/` (Observer, Facade, Adapter: email, SMS y WhatsApp simulados) e `importacion/` (CSV de más de 10.000 filas, Template Method).
 
-## Cómo trabajamos
-
-- `main` siempre demostrable. Cada cambio entra por una rama `feature/<modulo>-<tema>` y un PR con **1 revisión** del par asignado (ver sección 9 del lineamiento).
-- Nada se mergea con CI en rojo.
-- Si cambia el diseño, el diagrama en `docs/diagramas/` se actualiza **en el mismo PR**.
-- **Feature freeze: 29/11/2026.** Después de esa fecha solo se aceptan bugfixes y cambios visuales.
-
 ## Estado
 
 | Hito | Estado |
 |---|---|
-| H0 — Concepción (27/10 – 01/11) | En curso. Hecho: esqueleto del repo, núcleo de estados con tests, diagramas v0. Falta: bocetos |
-| H1 — Esqueleto de punta a punta (02/11 – 08/11) | Pendiente |
-| H2 — Inteligencia del dominio (09/11 – 15/11) | Pendiente |
-| H3 — Eventos, tiempo e integración (16/11 – 22/11) | Pendiente |
-| H4 — Pulido y validación (23/11 – 29/11) | Pendiente |
-| H5 — Ensayo (30/11 – entrega) | Pendiente |
+| H0 — Concepción | En curso. Hecho: esqueleto del repo, núcleo de estados con tests, diagramas v0. Falta: bocetos |
+| H1 — Esqueleto de punta a punta | Pendiente |
+| H2 — Inteligencia del dominio | Pendiente |
+| H3 — Eventos, tiempo e integración | Pendiente |
+| H4 — Pulido y validación | Pendiente |
+| H5 — Ensayo | Pendiente |
