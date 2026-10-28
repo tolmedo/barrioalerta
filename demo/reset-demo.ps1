@@ -11,7 +11,7 @@ try {
     docker compose down -v
     Write-Host 'Levantando PostgreSQL...'
     docker compose up -d --wait
-    Write-Host 'Listo. Ahora arrancar el backend con el perfil demo (Flyway recrea el esquema).'
+    Write-Host 'Listo. Ahora arrancar el backend en modo demo: cd backend; npm run demo'
 }
 finally {
     Pop-Location

@@ -1,64 +1,70 @@
 # Diagrama de clases — Módulo Notificaciones
 
-**Estado:** propuesto (H3, I4). Este módulo depende de Incidentes, porque escucha sus eventos. Incidentes **no** lo conoce: lo verifica la regla `elDominioNoConoceAlModuloDeNotificaciones` de `ArquitecturaTest`.
+**Estado:** propuesto (H3, I4). Este módulo depende de Incidentes, porque escucha sus eventos. Incidentes **no** lo conoce.
+
+Enunciado E1: "dado un destinatario, un mensaje y un medio de notificación (correo electrónico, SMS y WhatsApp)", primero simulado.
 
 ```mermaid
 classDiagram
 direction LR
 
 class NotificarInteresadosListener {
-  <<listener · AFTER_COMMIT + Async>>
-  +alCambiarEstado(EstadoIncidenteCambiado evento)
-  +alEscalar(IncidenteEscalado evento)
-  +alAdherir(AdhesionRegistrada evento)
+  <<suscriptor de eventos>>
+  +alCambiarEstado(evento: EstadoIncidenteCambiado)
+  +alEscalar(evento: IncidenteEscalado)
+  +alAdherir(evento: AdhesionRegistrada)
 }
 class ServicioNotificaciones {
   <<Facade>>
-  +notificarCambioDeEstado(EstadoIncidenteCambiado evento)
-  +notificarEscalamiento(IncidenteEscalado evento)
-  -destinatariosDe(Incidente incidente) List~Vecino~
-  -enviar(Notificacion notificacion)
+  +notificarCambioDeEstado(evento: EstadoIncidenteCambiado)
+  +notificarEscalamiento(evento: IncidenteEscalado)
+  -destinatariosDe(incidente: Incidente) Vecino[]
+  -enviar(notificacion: Notificacion)
 }
 class Notificacion {
-  -Long id
-  -Usuario destinatario
-  -TipoCanal canal
-  -String mensaje
-  -LocalDateTime fecha
-  -boolean leida
+  -id: number
+  -destinatario: Usuario
+  -canal: TipoCanal
+  -mensaje: string
+  -fecha: Date
+  -leida: boolean
   +marcarLeida()
 }
 class PlantillaDeMensaje {
-  +para(EventoDominio evento) String
+  +para(evento: EventoDominio) string
 }
 class CanalNotificacion {
   <<interface>>
-  +enviar(Notificacion notificacion)
-  +tipo() TipoCanal
+  +tipo: TipoCanal
+  +enviar(notificacion: Notificacion)
 }
 class CanalInApp {
-  +enviar(Notificacion notificacion)
+  +enviar(notificacion: Notificacion)
 }
 class CanalEmailSimulado {
   <<Adapter>>
-  +enviar(Notificacion notificacion)
+  +enviar(notificacion: Notificacion)
+}
+class CanalSmsSimulado {
+  <<Adapter>>
+  +enviar(notificacion: Notificacion)
 }
 class CanalWhatsAppSimulado {
   <<Adapter>>
-  +enviar(Notificacion notificacion)
+  +enviar(notificacion: Notificacion)
 }
 class CanalNotificacionFactory {
   <<Simple Factory>>
-  +crear(TipoCanal tipo) CanalNotificacion
+  +crear(tipo: TipoCanal) CanalNotificacion
 }
 class BandejaDeSimulacion {
-  +registrar(TipoCanal canal, Notificacion notificacion)
-  +enviadas() List~Notificacion~
+  +registrar(canal: TipoCanal, notificacion: Notificacion)
+  +enviadas() Notificacion[]
 }
 class RepositorioNotificaciones {
   <<interface>>
-  +guardar(Notificacion notificacion)
-  +noLeidasDe(Usuario usuario) List~Notificacion~
+  +guardar(notificacion: Notificacion)
+  +noLeidasDe(usuario: Usuario) Notificacion[]
 }
 
 NotificarInteresadosListener --> ServicioNotificaciones
@@ -69,14 +75,16 @@ ServicioNotificaciones ..> Notificacion : crea
 CanalNotificacionFactory ..> CanalNotificacion : crea
 CanalNotificacion <|.. CanalInApp
 CanalNotificacion <|.. CanalEmailSimulado
+CanalNotificacion <|.. CanalSmsSimulado
 CanalNotificacion <|.. CanalWhatsAppSimulado
 CanalEmailSimulado --> BandejaDeSimulacion
+CanalSmsSimulado --> BandejaDeSimulacion
 CanalWhatsAppSimulado --> BandejaDeSimulacion
 ```
 
 ## Decisiones
 
-- **Observer → Pub/Sub en proceso** (C10). El listener corre después del commit (`@TransactionalEventListener(phase = AFTER_COMMIT)`) y en otro hilo (`@Async`). Si un canal falla, la operación del operador no se revierte (D7).
+- **Observer → suscripción a eventos** (C10). El servicio de aplicación publica los eventos recién después de guardar el incidente, y el envío no bloquea la respuesta. Si un canal falla, la operación del operador no se revierte (D7).
 - **Facade** (C06): `ServicioNotificaciones` es el único punto de entrada. Los listeners no saben de canales ni de plantillas.
 - **Adapter** (C06): los canales simulados tienen la misma interfaz que tendría un proveedor real. Para pasar a WhatsApp real alcanza con otra implementación de `CanalNotificacion`.
 - **Simple Factory** (C06, mismo ejemplo `NotificadorFactory` de la clase): la elección del canal según la preferencia del vecino está en un solo lugar.

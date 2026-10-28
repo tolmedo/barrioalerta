@@ -1,5 +1,6 @@
 # Backend
-backend/target/
+backend/node_modules/
+backend/dist/
 backend/data/
 *.log
 
@@ -8,11 +9,6 @@ frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 *.tsbuildinfo
-
-# E2E
-e2e/node_modules/
-e2e/test-results/
-e2e/playwright-report/
 
 # Diagramas renderizados (se generan desde las fuentes)
 docs/diagramas/render/

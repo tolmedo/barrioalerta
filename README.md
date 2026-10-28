@@ -10,38 +10,19 @@ El lineamiento completo del trabajo está en [`../LINEAMIENTO_TP_DSI.md`](../LIN
 
 | Capa | Tecnología |
 |---|---|
-| Backend | Java 21 · Spring Boot 3.5 · Spring Data JPA · Flyway · PostgreSQL 16 |
+| Backend | Node.js 22 · TypeScript · Express 5 · PostgreSQL 16 |
 | Frontend | React · TypeScript · Vite · MUI (Material Design) · react-leaflet |
-| Tests | JUnit 5 · AssertJ · Mockito · ArchUnit · (Playwright, k6 en H4) |
-| Infra local | Docker Compose (solo la base de datos) |
+| Tests | Vitest · Supertest |
 
 ## Requisitos
 
-- **JDK 21 o superior** (recomendado: Eclipse Temurin 21). El código compila con `--release 21`; también funciona con JDK 25. No hace falta instalar Maven: se usa `./mvnw`.
 - **Node.js 22** (o ≥ 20.19).
-- **PostgreSQL 16**: con Docker Desktop (`docker compose up -d`) o instalado nativo, con base, usuario y contraseña `barrioalerta`.
-
-### Problemas conocidos en Windows
-
-- **Docker Desktop necesita WSL 2**, es decir, la "Plataforma de máquina virtual" habilitada y la virtualización activa en el BIOS. Si `wsl --status` dice que WSL 2 no es compatible, hay dos caminos:
-  - habilitarlo (requiere permisos de administrador y reiniciar);
-  - instalar PostgreSQL nativo.
-- **"Unable to establish loopback connection" al arrancar:** en algunas máquinas Java no puede crear su socket interno de NIO en la carpeta Temp del usuario.
-  - `./mvnw test` y `./mvnw spring-boot:run` ya lo resuelven solos, configurado en el `pom.xml`.
-  - Si se ejecuta el jar a mano, agregar el flag:
-
-```bash
-java -Djdk.net.unixdomain.tmpdir=target -jar target/barrioalerta-0.1.0-SNAPSHOT.jar
-```
+- **PostgreSQL 16**, con base, usuario y contraseña `barrioalerta`. Se puede instalar nativo (instalador oficial para Windows) o levantar con Docker Desktop (`docker compose up -d`). Docker Desktop necesita WSL 2 habilitado.
 
 ## Cómo levantarlo
 
 ```bash
-docker compose up -d
-```
-
-```bash
-cd backend && ./mvnw spring-boot:run
+cd backend && npm install && npm run dev
 ```
 
 ```bash
@@ -50,52 +31,50 @@ cd frontend && npm install && npm run dev
 
 - Front: http://localhost:5173 (las llamadas a `/api` se redirigen al backend).
 - API: http://localhost:8080/api/salud → `Hola desde BarrioAlerta`.
-- Salud técnica: http://localhost:8080/actuator/health
-
-En Windows sin Git Bash, usar `mvnw.cmd` en lugar de `./mvnw`.
+- Modo demo (reloj congelado a las 10:00, avanza solo cuando se le pide): `npm run demo` en `backend/`.
 
 ## Tests
 
 ```bash
-cd backend && ./mvnw verify
+cd backend && npm test
 ```
 
-Incluye la **tabla de transiciones del incidente** (cada fila del diagrama de estados es un caso de test) y las **reglas de arquitectura** (ArchUnit): el dominio no depende de Spring y los módulos no tienen ciclos.
+Incluye la **tabla de transiciones del incidente**: cada flecha del diagrama de estados es un caso de test, y cada combinación estado × acción que no está en el diagrama se verifica que sea rechazada.
 
 ## Estructura
 
 ```
 barrioalerta/
-├── backend/        Spring Boot (monolito modular)
-│   └── src/main/java/ar/utn/barrioalerta/
-│       ├── compartido/      configuración y manejo de errores transversal
-│       ├── identidad/       usuarios, roles, permisos (JWT en H1)
-│       ├── incidentes/      agregado Incidente, estados (State), cuadrillas, priorización
-│       ├── asignacion/      estrategias de asignación de cuadrillas (Strategy); depende de incidentes
-│       ├── notificaciones/  eventos → notificaciones (Observer, Facade, Adapter)
-│       ├── importacion/     importación CSV (Template Method)
-│       ├── geo/             adaptadores de geocodificación (Georef / offline)
-│       └── demo/            reloj controlable y reset (@Profile("demo"))
+├── backend/        Node + Express (aplicación multimódulo)
+│   ├── src/
+│   │   ├── app.ts           raíz de composición: crea y conecta los objetos (inyección de dependencias)
+│   │   ├── compartido/      errores de dominio, reloj, manejo de errores HTTP
+│   │   ├── identidad/       usuarios, roles, permisos
+│   │   ├── incidentes/      agregado Incidente, estados (State), cuadrillas, priorización (Strategy)
+│   │   ├── asignacion/      estrategias de asignación de cuadrillas (Strategy); depende de incidentes
+│   │   └── demo/            reloj controlable para la demo
+│   └── test/
 ├── frontend/       React + Vite + MUI
-├── docs/           arquitectura, diagramas (Mermaid / PlantUML), UX, validación
-├── demo/           guion, checklist, ensayos, seed, scripts de reset
-├── e2e/            Playwright (guion automatizado, H4)
+├── docs/           justificaciones de diseño y diagramas
+├── demo/           guion, checklist, ensayos, seed, script de reset
 └── docker-compose.yml
 ```
+
+Módulos pendientes: `notificaciones/` (Observer, Facade, Adapter: email, SMS y WhatsApp simulados) e `importacion/` (CSV de más de 10.000 filas, Template Method).
 
 ## Cómo trabajamos
 
 - `main` siempre demostrable. Cada cambio entra por una rama `feature/<modulo>-<tema>` y un PR con **1 revisión** del par asignado (ver sección 9 del lineamiento).
 - Nada se mergea con CI en rojo.
-- Si cambia el diseño, el diagrama en `docs/diagramas/` se actualiza **en el mismo PR** (coherencia clases ↔ secuencia ↔ código).
+- Si cambia el diseño, el diagrama en `docs/diagramas/` se actualiza **en el mismo PR**.
 - **Feature freeze: 29/11/2026.** Después de esa fecha solo se aceptan bugfixes y cambios visuales.
 
 ## Estado
 
 | Hito | Estado |
 |---|---|
-| H0 — Concepción (27/10 – 01/11) | En curso. Hecho: esqueleto del repo, núcleo de estados con 111 tests verdes, diagramas v0. Falta: BPMN y bocetos |
-| H1 — Esqueleto E2E (02/11 – 08/11) | Pendiente |
+| H0 — Concepción (27/10 – 01/11) | En curso. Hecho: esqueleto del repo, núcleo de estados con tests, diagramas v0. Falta: bocetos |
+| H1 — Esqueleto de punta a punta (02/11 – 08/11) | Pendiente |
 | H2 — Inteligencia del dominio (09/11 – 15/11) | Pendiente |
 | H3 — Eventos, tiempo e integración (16/11 – 22/11) | Pendiente |
 | H4 — Pulido y validación (23/11 – 29/11) | Pendiente |

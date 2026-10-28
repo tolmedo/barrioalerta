@@ -10,36 +10,34 @@ direction LR
 
 class EstrategiaAsignacion {
   <<interface>>
-  +proponer(Incidente incidente, List~Cuadrilla~ cuadrillas, ContextoAsignacion contexto) List~PropuestaAsignacion~
-  +nombre() String
+  +proponer(incidente, cuadrillas, contexto) PropuestaAsignacion[]
+  +nombre: string
 }
 class AsignacionPorCercania {
   <<propuesto H2>>
-  +proponer(Incidente incidente, List~Cuadrilla~ cuadrillas, ContextoAsignacion contexto) List~PropuestaAsignacion~
+  +proponer(incidente, cuadrillas, contexto) PropuestaAsignacion[]
 }
 class AsignacionPorMenorCarga {
   <<propuesto H2>>
-  +proponer(Incidente incidente, List~Cuadrilla~ cuadrillas, ContextoAsignacion contexto) List~PropuestaAsignacion~
+  +proponer(incidente, cuadrillas, contexto) PropuestaAsignacion[]
 }
 class PropuestaAsignacion {
-  <<record>>
-  Cuadrilla cuadrilla
-  double score
-  String justificacion
+  cuadrilla: Cuadrilla
+  score: number
+  justificacion: string
 }
 class ContextoAsignacion {
-  <<record>>
-  Map~Cuadrilla, Integer~ incidentesActivosPorCuadrilla
-  +cargaDe(Cuadrilla cuadrilla) int
+  -incidentesActivosPorCuadrilla: Map~string, number~
+  +cargaDe(cuadrilla: Cuadrilla) number
 }
 class RegistroDeEstrategias {
   <<propuesto H2 · Simple Factory>>
-  +obtener(String nombre) EstrategiaAsignacion
-  +disponibles() List~String~
+  +obtener(nombre: string) EstrategiaAsignacion
+  +disponibles() string[]
 }
 class PropuestasDeAsignacionService {
   <<propuesto H2 · servicio de aplicación>>
-  +proponer(Long incidenteId, String nombreEstrategia) List~PropuestaAsignacion~
+  +proponer(incidenteId: number, nombreEstrategia: string) PropuestaAsignacion[]
 }
 class Incidente {
   <<módulo incidentes>>
@@ -60,9 +58,9 @@ PropuestasDeAsignacionService --> RegistroDeEstrategias
 
 ## Reglas para las implementaciones (H2)
 
-- **Solo** se proponen cuadrillas con `cuadrilla.puedeAtender(incidente.tipo())`.
+- **Solo** se proponen cuadrillas con `cuadrilla.puedeAtender(incidente.tipo)`.
 - Se devuelven como máximo 3 propuestas, ordenadas por `score` descendente, con `score` en [0, 1] y una `justificacion` legible (por ejemplo, "A 420 m de la base").
 - `AsignacionPorCercania`: `score = 1 − min(distancia / 5000 m, 1)` usando `Ubicacion.distanciaMetrosA`.
 - `AsignacionPorMenorCarga`: `score = 1 / (1 + carga)` con `contexto.cargaDe(cuadrilla)`.
-- Las estrategias se registran como beans de Spring y `RegistroDeEstrategias` las indexa por `nombre()`. Agregar una nueva no modifica clases existentes (OCP, RNF8).
+- Las estrategias se crean en la raíz de composición (`app.ts`) y `RegistroDeEstrategias` las indexa por `nombre`. Agregar una nueva no modifica clases existentes (OCP, RNF8).
 - **State ≠ Strategy:** el incidente no elige su estrategia. La elige el operador en la UI.

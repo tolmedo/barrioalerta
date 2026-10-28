@@ -10,7 +10,6 @@ actor "Operador municipal" as Operador
 actor "Miembro de cuadrilla" as Cuadrilla
 actor "Administrador" as Admin
 actor "Reloj del sistema" as Reloj <<sistema>>
-actor "Georef API" as Georef <<sistema externo>>
 
 Visitante <|-- Vecino
 
@@ -49,15 +48,13 @@ rectangle "BarrioAlerta" {
     usecase "Configurar tipos y SLA" as UC_Tipos
     usecase "Configurar pesos de priorización" as UC_Pesos
     usecase "Gestionar cuadrillas" as UC_Cuadrillas
-    usecase "Importar históricos CSV" as UC_Importar
-    usecase "Avanzar reloj de demo" as UC_RelojDemo
+    usecase "Importar padrón de vecinos (CSV)" as UC_Importar
   }
 
   package "Procesos automáticos" {
     usecase "Escalar incidentes\ncon SLA vencido" as UC_Escalar
     usecase "Cerrar resueltos\nsin reapertura (72 h)" as UC_AutoCierre
     usecase "Notificar interesados" as UC_Notificar
-    usecase "Resolver dirección y barrio" as UC_Geo
   }
 }
 
@@ -83,21 +80,18 @@ Admin --> UC_Tipos
 Admin --> UC_Pesos
 Admin --> UC_Cuadrillas
 Admin --> UC_Importar
-Admin --> UC_RelojDemo
 
 Reloj --> UC_Escalar
 Reloj --> UC_AutoCierre
 
-UC_Reportar ..> UC_Login : <<include>>
-UC_Asignar ..> UC_Login : <<include>>
-UC_Resolver ..> UC_Login : <<include>>
-UC_Tipos ..> UC_Login : <<include>>
 UC_Reportar ..> UC_VerDup : <<include>>
-UC_Reportar ..> UC_Geo : <<include>>
 UC_Adherir .> UC_VerDup : <<extend>>
 UC_Asignar ..> UC_Propuestas : <<include>>
 UC_Escalar ..> UC_Notificar : <<include>>
 UC_Asignar ..> UC_Notificar : <<include>>
 UC_Resolver ..> UC_Notificar : <<include>>
-UC_Geo --> Georef
+note as N1
+  Todos los casos de Vecino, Operador, Cuadrilla y Administrador
+  requieren estar autenticado (Autenticarse).
+end note
 @enduml

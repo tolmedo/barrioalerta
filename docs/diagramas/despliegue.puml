@@ -1,78 +1,32 @@
-@startuml despliegue-actual
-title BarrioAlerta — Despliegue actual (demo local)
+@startuml despliegue
+title BarrioAlerta — Despliegue (demo local)
 
 node "Notebook 1 (principal)" <<device>> {
   node "Windows 11" <<os>> {
     node "Navegador (perfil limpio)" <<execution environment>> {
       artifact "SPA React (build estático)" as SPA1
     }
-    node "JVM 21" <<execution environment>> {
-      artifact "barrioalerta.jar\n(Spring Boot, perfil demo,\nsirve también la SPA)" as JAR1
+    node "Node.js 22" <<execution environment>> {
+      artifact "backend (Express, modo demo,\nsirve también la SPA)" as API1
     }
-    node "Docker Desktop" <<execution environment>> {
-      database "PostgreSQL 16\n(volumen barrioalerta-db)" as DB1
-    }
-    folder "data/fotos\n+ caba.pmtiles" as Archivos1
+    database "PostgreSQL 16" as DB1
+    folder "data/fotos" as Archivos1
   }
 }
 
-node "Notebook 2 (espejo de plan B)" <<device>> {
+node "Notebook 2 (plan B)" <<device>> {
   artifact "mismo tag v1.0-demo\n+ mismo seed" as Espejo
 }
 
 node "Proyector" <<device>> as Proyector
 
-SPA1 --> JAR1 : HTTP :8080 (mismo origen)
-JAR1 --> DB1 : JDBC :5432
-JAR1 --> Archivos1 : lectura/escritura
+SPA1 --> API1 : HTTP :8080 (mismo origen)
+API1 --> DB1 : TCP :5432
+API1 --> Archivos1 : lectura/escritura
 Proyector -- "Notebook 1 (principal)" : HDMI
 note right of Espejo
   Sin red entre notebooks:
   el cambio es de cable HDMI (< 30 s).
   Nada requiere internet.
-end note
-@enduml
-
-@startuml despliegue-objetivo
-title BarrioAlerta — Despliegue objetivo (evolución, no se implementa)
-
-node "Cliente" {
-  artifact "SPA React" as SPA
-  artifact "App móvil (futura)" as Movil
-}
-
-cloud "Nube" {
-  node "API Gateway" as GW
-  node "Service Registry" as REG
-  node "Servicio Incidentes" as SInc
-  node "Servicio Identidad" as SId
-  node "Servicio Notificaciones" as SNot
-  queue "Broker (RabbitMQ)\ntópico incidentes" as MQ
-  database "BD Incidentes\n(PostgreSQL)" as DBInc
-  database "BD Identidad\n(PostgreSQL)" as DBId
-  database "Bitácora de eventos\n(MongoDB)" as DBEv
-}
-
-cloud "Georef API" as Georef
-cloud "Proveedores de mensajería\n(email / WhatsApp)" as Proveedores
-
-SPA --> GW : HTTPS
-Movil --> GW : HTTPS
-GW --> SInc
-GW --> SId
-SInc ..> REG
-SNot ..> REG
-SId ..> REG
-SInc --> DBInc
-SId --> DBId
-SInc --> MQ : publica (Transactional Outbox)
-MQ --> SNot : consume
-SNot --> DBEv
-SNot --> Proveedores
-SInc --> Georef
-note bottom of MQ
-  Evolución descripta en D2/D7 del lineamiento:
-  se extrae primero Notificaciones porque
-  es el módulo con picos de carga.
 end note
 @enduml

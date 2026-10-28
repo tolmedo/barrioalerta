@@ -1,7 +1,7 @@
 # Diagrama de estados — Incidente
 
 **Estado:** implementado. Cada flecha es una fila de `TRANSICIONES` en
-`backend/src/test/java/.../incidentes/dominio/TablaDeTransicionesTest.java`. Cualquier combinación estado × acción que no aparezca acá lanza `TransicionInvalidaException` (HTTP 409).
+`backend/test/incidentes/tablaDeTransiciones.test.ts`. Cualquier combinación estado × acción que no aparezca acá lanza `TransicionInvalidaException` (HTTP 409).
 
 ```mermaid
 stateDiagram-v2

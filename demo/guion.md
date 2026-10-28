@@ -13,8 +13,8 @@
 | 5:00–6:30 | I2 | Login **Operadora Carla** → bandeja → validar la luminaria → Ranking: cambiar "Ponderada" ↔ "Riesgo SLA" | **Strategy** (priorización), OCP | Captura del ranking en ambas estrategias |
 | 6:30–8:00 | I3 → I4 | Asignar: columnas Cercanía (Norte) vs Menor carga (Luminarias) → asignar → campana de Ana: "Tu reclamo fue asignado" + bandeja simulada | **Strategy ≠ State**; **Observer** + Adapter | Usar #103 ya asignado |
 | 8:00–9:30 | I3 → I1 | Vista mobile de la cuadrilla → Iniciar → Resolver con `luminaria-ok.jpg` → historial (quién, qué, cuándo) | **State**, auditoría, no repudio | Usar #104 ya resuelto |
-| 9:30–10:45 | I7 → I4 | Panel demo: reloj "10:00" → **+48 h** → #110 aparece **escalado** + notificación | Cron y asincronía; `Clock` inyectado (DIP) | "Ejecutar control de SLA" sobre #111 |
-| 10:45–12:00 | I6 | Tests verdes, ArchUnit, k6 (P95), Lighthouse, Playwright | U8: verificación vs validación | Capturas en la slide |
+| 9:30–10:45 | I7 → I4 | Panel demo: reloj "10:00" → **+48 h** → #110 aparece **escalado** + notificación | Tarea programada y asincronía; `Reloj` inyectado (DIP) | "Ejecutar control de SLA" sobre #111 |
+| 10:45–12:00 | I6 | Tests verdes (la tabla de transiciones) y resultados de las pruebas con usuarios | U8: verificación vs validación | Capturas en la slide |
 | 12:00–12:30 | I1 | Cierre y evolución | — | — |
 | 12:30–15:00 | Todos | Preguntas: responde el dueño del tema (sección 9 del lineamiento) | — | — |
 

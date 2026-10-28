@@ -1,47 +1,41 @@
 @startuml componentes
-title BarrioAlerta — Diagrama de componentes (C4 nivel 3, v0)
+title BarrioAlerta — Diagrama de componentes (v0)
 skinparam componentStyle uml2
 
 node "Navegador" {
   [SPA React] as SPA
 }
 
-package "Backend Spring Boot (monolito modular)" {
-  [API REST\n(controllers + ManejadorDeErrores)] as API
+package "Backend Node + Express (aplicación multimódulo)" {
+  [API REST\n(rutas + manejadorDeErrores)] as API
   interface "HTTP/JSON" as HTTP
   API - HTTP
 
-  [Identidad\n(JWT, Usuario/Rol/Permiso)] as Identidad
+  [Identidad\n(Usuario/Rol/Permiso, tokens)] as Identidad
   [Incidentes\n(agregado, estados, priorización, cuadrillas)] as Incidentes
   [Asignación\n(estrategias)] as Asignacion
-  [Notificaciones\n(Facade, canales, factory)] as Notificaciones
+  [Notificaciones\n(Facade, canales simulados)] as Notificaciones
   [Importación CSV\n(Template Method)] as Importacion
-  [Geo\n(adaptadores)] as Geo
-  [Planificador\n(ControlDeSlaJob, cierre 72 h)] as Planificador
-  [Demo\n(RelojDeDemo, reset)] as Demo
-  [Repositorios JPA] as Repos
+  [Tarea programada\n(control de SLA, cierre a las 72 h)] as Planificador
+  [Demo\n(RelojDeDemo)] as Demo
+  [Repositorios\n(ORM)] as Repos
 
-  interface "Geocodificador" as PuertoGeo
   interface "EstrategiaAsignacion" as PuertoAsignacion
   interface "Eventos de dominio" as Eventos
-  interface "Clock" as Reloj
+  interface "Reloj" as Reloj
 
-  Incidentes -- PuertoGeo
-  Geo ..> PuertoGeo : implementa
   Asignacion -- PuertoAsignacion
   Incidentes -- Eventos
-  Notificaciones ..> Eventos : escucha (async)
+  Notificaciones ..> Eventos : se suscribe
   Demo -- Reloj
   Planificador ..> Reloj
-  Incidentes ..> Reloj
 
   API ..> Identidad
   API ..> Incidentes
   API ..> Asignacion
   API ..> Importacion
-  API ..> Demo
   Asignacion ..> Incidentes
-  Importacion ..> Incidentes
+  Importacion ..> Identidad
   Planificador ..> Incidentes
   Incidentes ..> Identidad
   Incidentes ..> Repos
@@ -51,15 +45,13 @@ package "Backend Spring Boot (monolito modular)" {
 
 database "PostgreSQL 16" as DB
 folder "Fotos\n(./data/fotos)" as Fotos
-cloud "Georef API\n(apis.datos.gob.ar)" as Georef
 
 SPA ..> HTTP
-Repos ..> DB : JDBC
+Repos ..> DB
 Incidentes ..> Fotos
-Geo ..> Georef : HTTPS (solo fuera de la demo)
 
 note bottom of Asignacion
   Las dependencias entre módulos van en un solo sentido
-  (sin ciclos): lo verifica ArquitecturaTest (ArchUnit).
+  (sin ciclos): Asignación conoce a Incidentes, nunca al revés.
 end note
 @enduml
