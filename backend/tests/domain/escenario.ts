@@ -42,7 +42,7 @@ export function unBache(): IncidenteBuilder {
   return new IncidenteBuilder();
 }
 
-/** Builder de datos de prueba (C06 · Patrones creacionales). */
+/** Builder de datos de prueba */
 class IncidenteBuilder {
   private reportante = ANA;
   private ahora = INICIO;

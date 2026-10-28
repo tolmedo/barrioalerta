@@ -1,5 +1,5 @@
 /**
- * Todo el código que necesita "la hora actual" recibe un Reloj (inversión de dependencias, C07).
+ * Todo el código que necesita "la hora actual" recibe un Reloj
  * En producción es el reloj del sistema; en la demo, un RelojDeDemo que solo avanza cuando se le
  * pide; en los tests de dominio se pasan fechas fijas.
  */

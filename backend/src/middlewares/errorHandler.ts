@@ -1,7 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { AppError } from '../errors/AppError.js';
 
-/** Traduce los errores a la respuesta HTTP. Nunca se responde 200 ante un error. */
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (res.headersSent) {
     return next(err);

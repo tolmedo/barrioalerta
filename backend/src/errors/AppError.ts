@@ -1,7 +1,3 @@
-/**
- * Errores de la aplicación con su código HTTP. Los modelos y los servicios lanzan el que
- * corresponde y el middleware errorHandler arma la respuesta.
- */
 export class AppError extends Error {
   readonly statusCode: number;
   readonly status: 'fail' | 'error';

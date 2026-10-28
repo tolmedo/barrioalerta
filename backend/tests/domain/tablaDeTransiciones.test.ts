@@ -7,7 +7,6 @@ import { ANA, INICIO, MIEMBRO_NORTE, NORTE, OPERADORA, evidencia, unBache } from
 /**
  * El diagrama de estados (docs/diagramas/estados-incidente.md) convertido en test: cada fila de
  * TRANSICIONES es una flecha del diagrama. Todo lo que no figura en la tabla debe ser rechazado.
- * Si se cambia el diagrama, se cambia esta tabla en el mismo PR.
  */
 const ESTADOS: NombreEstado[] = [
   'REPORTADO',

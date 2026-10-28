@@ -5,7 +5,7 @@ import { CircleMarker, MapContainer, Popup, TileLayer } from 'react-leaflet'
 const UTN_MEDRANO: [number, number] = [-34.5986, -58.4202]
 
 /**
- * Mapa base. TODO H1 (I5, riesgo R1): reemplazar las teselas online de OpenStreetMap por un
+ * Mapa base. TODO H1: reemplazar las teselas online de OpenStreetMap por un
  * extracto local de CABA en PMTiles para que la demo funcione sin internet.
  */
 export function MapaBarrio() {

@@ -4,7 +4,7 @@ import { masHoras, type Reloj } from './reloj.js';
  * Reloj congelado que solo avanza cuando se le pide. Hace que la demo sea determinística: el paso
  * del tiempo real durante la exposición no dispara escalamientos inesperados.
  *
- * Pendiente H3 (I7): endpoints PUT /api/demo/reloj y POST /api/demo/reinicios para el guion.
+ * Pendiente H3: endpoints PUT /api/demo/reloj y POST /api/demo/reinicios para el guion.
  */
 export class RelojDeDemo implements Reloj {
   private actual: Date;

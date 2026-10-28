@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 
 /**
- * Tokens de diseño (lineamiento, sección 7.3). Los colores de estado se acompañan siempre de
+ * Tokens de diseño. Los colores de estado se acompañan siempre de
  * texto o ícono: el estado nunca se comunica solo con color (WCAG).
  */
 export const coloresDeEstado = {
@@ -28,7 +28,6 @@ export const tema = createTheme({
     fontFamily: 'Roboto, system-ui, -apple-system, "Segoe UI", sans-serif',
   },
   components: {
-    // Zona clickeable mínima de 48 px (Ref. DonaTrack E4, accesibilidad táctil).
     MuiButton: { styleOverrides: { root: { minHeight: 48 } } },
     MuiIconButton: { styleOverrides: { root: { minWidth: 48, minHeight: 48 } } },
   },
