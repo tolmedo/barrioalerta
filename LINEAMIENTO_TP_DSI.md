@@ -16,7 +16,7 @@
 ### 2.1 Qué entra
 
 | # | Funcionalidad |
-|---|---|---|
+|---|---|
 | M1 | Login con roles (Vecino, Operador, Cuadrilla, Admin) y acceso rápido con usuarios demo |
 | M2 | Reportar incidente: tipo, pin en el mapa, foto, descripción |
 | M3 | Sumarse a un reclamo existente desde el mapa; el operador marca duplicados a mano |
