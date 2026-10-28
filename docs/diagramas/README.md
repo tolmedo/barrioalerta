@@ -1,7 +1,5 @@
 # Diagramas
 
-Son los que pide el enunciado del TP Anual (entregas 1 a 4). **Si cambia el código, el diagrama se actualiza en el mismo PR** (C13: "diagramas lindos pero inconsistentes entre sí").
-
 Estado de cada diagrama:
 - **Implementado:** el código del repo coincide con el diagrama (nombres de clases y métodos).
 - **Propuesto:** es diseño hacia adelante y todavía no hay código.
