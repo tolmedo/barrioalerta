@@ -10,6 +10,7 @@ export class Vecino {
     readonly usuario: Usuario,
     readonly barrio: string,
     canalPreferido: TipoCanal = TipoCanal.IN_APP,
+    readonly id?: number,
   ) {
     this._canalPreferido = canalPreferido;
   }

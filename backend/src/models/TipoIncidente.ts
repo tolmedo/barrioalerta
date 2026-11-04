@@ -6,6 +6,7 @@ export class TipoIncidente {
   constructor(
     readonly nombre: string,
     readonly slaHoras: number,
+    readonly id?: number,
   ) {
     if (!nombre.trim()) {
       throw new Error('El nombre del tipo es obligatorio');

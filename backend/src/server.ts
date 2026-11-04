@@ -1,4 +1,5 @@
 import app from './app.js';
+import { conectarDB } from './db/connection.js';
 import { configurarReloj } from './utils/reloj.js';
 import { RelojDeDemo } from './utils/relojDeDemo.js';
 
@@ -19,6 +20,8 @@ if (MODO_DEMO) {
   configurarReloj(new RelojDeDemo(inicioDeDemo()));
 }
 
-app.listen(PORT, () => {
-  console.log(`BarrioAlerta escuchando en http://localhost:${PORT}${MODO_DEMO ? ' (modo demo)' : ''}`);
+conectarDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`BarrioAlerta escuchando en http://localhost:${PORT}${MODO_DEMO ? ' (modo demo)' : ''}`);
+  });
 });

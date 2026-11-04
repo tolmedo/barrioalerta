@@ -21,7 +21,7 @@ import type { Vecino } from './Vecino.js';
 export class Incidente {
   private _id: number | undefined;
   private readonly _descripcion: string;
-  private readonly _vencimientoSla: Date;
+  private _vencimientoSla: Date;
   private _estado: EstadoIncidente;
   private _cuadrillaAsignada: Cuadrilla | null = null;
   private _original: Incidente | null = null;
@@ -59,6 +59,22 @@ export class Incidente {
     ahora: Date,
   ): Incidente {
     return new Incidente(tipo, descripcion, ubicacion, reportante, ahora);
+  }
+
+  /** Rearma un incidente guardado, sin volver a ejecutar las reglas ni los eventos del alta. Lo usa el repositorio. */
+  static reconstituir(datos: DatosIncidente): Incidente {
+    const incidente = new Incidente(datos.tipo, datos.descripcion, datos.ubicacion, datos.reportante, datos.fechaReporte);
+    incidente._id = datos.id;
+    incidente._vencimientoSla = datos.vencimientoSla;
+    incidente._estado = datos.estado;
+    incidente._cuadrillaAsignada = datos.cuadrillaAsignada;
+    incidente._original = datos.original;
+    incidente._nivelEscalamiento = datos.nivelEscalamiento;
+    incidente._historial.splice(0, incidente._historial.length, ...datos.historial);
+    incidente._adhesiones.push(...datos.adhesiones);
+    incidente._evidencias.push(...datos.evidencias);
+    incidente._eventos = [];
+    return incidente;
   }
 
   // ---------------------------------------------------------------- comportamiento de negocio
@@ -210,6 +226,16 @@ export class Incidente {
     return this._historial[this._historial.length - 1]!.fecha;
   }
 
+  // ------------------------------------------------------------ uso exclusivo del repositorio
+
+  /** Lo llama el repositorio después de guardar un incidente nuevo. */
+  asignarId(id: number): void {
+    if (this._id !== undefined) {
+      throw new Error(`El incidente ya tiene id ${this._id}`);
+    }
+    this._id = id;
+  }
+
   // ---------------------------------------------------------------- consultas
 
   get id(): number | undefined {
@@ -255,6 +281,23 @@ export class Incidente {
   get evidencias(): readonly Evidencia[] {
     return [...this._evidencias];
   }
+}
+
+export interface DatosIncidente {
+  id: number;
+  tipo: TipoIncidente;
+  descripcion: string;
+  ubicacion: Ubicacion;
+  reportante: Vecino;
+  fechaReporte: Date;
+  vencimientoSla: Date;
+  estado: EstadoIncidente;
+  cuadrillaAsignada: Cuadrilla | null;
+  original: Incidente | null;
+  nivelEscalamiento: number;
+  historial: CambioDeEstado[];
+  adhesiones: Adhesion[];
+  evidencias: Evidencia[];
 }
 
 function exigirMotivo(motivo: string): void {

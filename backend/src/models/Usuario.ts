@@ -6,12 +6,17 @@ export class Rol {
   constructor(
     readonly nombre: string,
     permisos: Iterable<Permiso>,
+    readonly id?: number,
   ) {
     this.permisos = new Set(permisos);
   }
 
   tenesPermiso(permiso: Permiso): boolean {
     return this.permisos.has(permiso);
+  }
+
+  get listaDePermisos(): Permiso[] {
+    return [...this.permisos];
   }
 }
 
@@ -23,6 +28,7 @@ export class Usuario {
   constructor(
     readonly username: string,
     readonly rol: Rol,
+    readonly id?: number,
   ) {
     if (!username.trim()) {
       throw new Error('El username es obligatorio');

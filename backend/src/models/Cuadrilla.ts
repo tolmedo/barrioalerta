@@ -15,6 +15,7 @@ export class Cuadrilla {
     readonly base: Ubicacion,
     especialidades: readonly TipoIncidente[],
     miembros: readonly Usuario[],
+    readonly id?: number,
   ) {
     if (miembros.length === 0) {
       throw new Error('Una cuadrilla necesita al menos un miembro');
