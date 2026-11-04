@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+import { usuarioAutenticado } from '../middlewares/authHandler.js';
 import * as service from '../services/incidenteService.js';
 
 const getIncidentes: RequestHandler = async (req, res, next) => {
@@ -16,13 +17,13 @@ const getIncidenteById: RequestHandler = async (req, res, next) => {
 
 const reportarIncidente: RequestHandler = async (req, res, next) => {
   try {
-    res.status(201).json(await service.reportarIncidente(req.body ?? {}));
+    res.status(201).json(await service.reportarIncidente(req.body ?? {}, usuarioAutenticado(req).username));
   } catch (e) { next(e); }
 };
 
 const cambiarEstado: RequestHandler = async (req, res, next) => {
   try {
-    res.status(201).json(await service.cambiarEstado(req.params.id, req.body ?? {}));
+    res.status(201).json(await service.cambiarEstado(req.params.id, req.body ?? {}, usuarioAutenticado(req).username));
   } catch (e) { next(e); }
 };
 

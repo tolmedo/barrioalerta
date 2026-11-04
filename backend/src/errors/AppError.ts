@@ -24,6 +24,13 @@ export class UnauthorizedError extends AppError {
   }
 }
 
+/** El usuario está identificado pero su rol no le permite hacer la operación. */
+export class ForbiddenError extends AppError {
+  constructor(message: string) {
+    super(message, 403);
+  }
+}
+
 export class NotFoundError extends AppError {
   constructor(message: string) {
     super(message, 404);

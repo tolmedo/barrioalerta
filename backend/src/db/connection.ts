@@ -6,7 +6,7 @@ import { TipoIncidenteSchema } from './schemas/TipoIncidenteSchema.js';
 import { UsuarioSchema } from './schemas/UsuarioSchema.js';
 import { VecinoSchema } from './schemas/VecinoSchema.js';
 
-const ESQUEMA = process.env.DB_SCHEMA ?? 'public';
+export const ESQUEMA = process.env.DB_SCHEMA ?? 'public';
 
 /**
  * PostgreSQL con TypeORM. Las tablas se generan a partir de los schemas (`synchronize`), sin

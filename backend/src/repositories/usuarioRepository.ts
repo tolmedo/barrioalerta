@@ -20,6 +20,12 @@ export const getByUsername = async (username: string) => {
   return fila ? aUsuario(fila) : null;
 };
 
+/** Para el login: el usuario y el hash de su contraseña, que no forma parte del modelo de dominio. */
+export const getCredenciales = async (username: string) => {
+  const fila = await repo().findOne({ where: { username }, relations: RELACIONES_USUARIO });
+  return fila ? { usuario: aUsuario(fila), passwordHash: fila.passwordHash } : null;
+};
+
 export const create = async (usuario: Usuario, passwordHash: string | null = null) => {
   const { id } = await repo().save({
     username: usuario.username,

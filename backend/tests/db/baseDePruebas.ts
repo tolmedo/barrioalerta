@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { AppDataSource, inicializarDB } from '../../src/db/connection.js';
 import { Cuadrilla } from '../../src/models/Cuadrilla.js';
 import type { TipoIncidente } from '../../src/models/TipoIncidente.js';
@@ -8,7 +9,18 @@ import * as rolRepository from '../../src/repositories/rolRepository.js';
 import * as tipoIncidenteRepository from '../../src/repositories/tipoIncidenteRepository.js';
 import * as usuarioRepository from '../../src/repositories/usuarioRepository.js';
 import * as vecinoRepository from '../../src/repositories/vecinoRepository.js';
+import { generarToken } from '../../src/utils/tokenUtils.js';
 import { ANA, BACHE, BRUNO, MIEMBRO_NORTE, NORTE, OPERADORA } from '../domain/escenario.js';
+
+/** Todos los usuarios del escenario tienen esta contraseña. */
+export const CLAVE_DE_PRUEBA = 'clave-de-prueba';
+
+// Costo bajo para que los tests no tarden; la app usa el costo por defecto.
+const HASH_DE_PRUEBA = bcrypt.hashSync(CLAVE_DE_PRUEBA, 4);
+
+/** Header Authorization con un token válido para el usuario. */
+export const autorizacion = (usuario: Usuario) =>
+  `Bearer ${generarToken({ username: usuario.username, rol: usuario.rol.nombre })}`;
 
 /** Los datos del escenario ya guardados, con sus ids. */
 export interface EscenarioGuardado {
@@ -41,7 +53,7 @@ export async function reiniciarBase(): Promise<EscenarioGuardado> {
     return roles.get(rol.nombre)!;
   };
   const guardarUsuario = async (usuario: Usuario) =>
-    usuarioRepository.create(new Usuario(usuario.username, await guardarRol(usuario.rol)));
+    usuarioRepository.create(new Usuario(usuario.username, await guardarRol(usuario.rol)), HASH_DE_PRUEBA);
   const guardarVecino = async (vecino: Vecino) =>
     vecinoRepository.create(new Vecino(vecino.nombre, await guardarUsuario(vecino.usuario), vecino.barrio, vecino.canalPreferido));
 
