@@ -55,9 +55,16 @@ const aIncidente = async (fila: IncidenteFila): Promise<Incidente> =>
     ),
   });
 
-export const getAll = async () =>
+/** `estado` filtra por la columna desnormalizada, sin recorrer el historial. */
+export const getAll = async (filtros: { estado?: string } = {}) =>
   Promise.all(
-    (await repo().find({ relations: RELACIONES_INCIDENTE, order: { id: 'ASC', ...ORDEN_HISTORIAL } })).map(aIncidente),
+    (
+      await repo().find({
+        where: filtros.estado ? { estado: filtros.estado } : {},
+        relations: RELACIONES_INCIDENTE,
+        order: { id: 'ASC', ...ORDEN_HISTORIAL },
+      })
+    ).map(aIncidente),
   );
 
 export async function getById(id: number): Promise<Incidente | null> {

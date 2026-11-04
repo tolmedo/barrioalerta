@@ -103,7 +103,7 @@ export class Incidente {
   }
 
   marcarDuplicadoDe(original: Incidente, operador: Usuario, ahora: Date): void {
-    if (original === this) {
+    if (original === this || (original.id !== undefined && original.id === this.id)) {
       throw new UnprocessableEntityError('Un incidente no puede ser duplicado de sí mismo');
     }
     if (!original.tipo.esIgualA(this.tipo)) {

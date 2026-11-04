@@ -1,21 +1,17 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { AppDataSource, inicializarDB } from '../../src/db/connection.js';
+import { AppDataSource } from '../../src/db/connection.js';
 import { IncidenteSchema } from '../../src/db/schemas/IncidenteSchema.js';
-import { Cuadrilla } from '../../src/models/Cuadrilla.js';
+import type { Cuadrilla } from '../../src/models/Cuadrilla.js';
 import { TransicionInvalidaError } from '../../src/models/EstadoIncidente.js';
 import { Incidente } from '../../src/models/Incidente.js';
 import { Evidencia } from '../../src/models/RegistrosIncidente.js';
 import type { TipoIncidente } from '../../src/models/TipoIncidente.js';
-import { type Rol, Usuario } from '../../src/models/Usuario.js';
-import { Vecino } from '../../src/models/Vecino.js';
-import * as cuadrillaRepository from '../../src/repositories/cuadrillaRepository.js';
+import type { Usuario } from '../../src/models/Usuario.js';
+import type { Vecino } from '../../src/models/Vecino.js';
 import * as incidenteRepository from '../../src/repositories/incidenteRepository.js';
-import * as rolRepository from '../../src/repositories/rolRepository.js';
-import * as tipoIncidenteRepository from '../../src/repositories/tipoIncidenteRepository.js';
-import * as usuarioRepository from '../../src/repositories/usuarioRepository.js';
-import * as vecinoRepository from '../../src/repositories/vecinoRepository.js';
 import { masHoras } from '../../src/utils/reloj.js';
-import { ANA, BACHE, BRUNO, INICIO, MEDRANO_950, MIEMBRO_NORTE, NORTE, OPERADORA } from '../domain/escenario.js';
+import { conectarBaseDePruebas, desconectarBaseDePruebas, reiniciarBase } from '../db/baseDePruebas.js';
+import { INICIO, MEDRANO_950 } from '../domain/escenario.js';
 
 let ana: Vecino;
 let bruno: Vecino;
@@ -24,46 +20,17 @@ let miembroNorte: Usuario;
 let bache: TipoIncidente;
 let norte: Cuadrilla;
 
-/** Guarda los datos del escenario y se queda con las versiones que tienen id. */
-async function guardarEscenario() {
-  const roles = new Map<string, Rol>();
-  const guardarRol = async (rol: Rol) => {
-    if (!roles.has(rol.nombre)) {
-      roles.set(rol.nombre, await rolRepository.create(rol));
-    }
-    return roles.get(rol.nombre)!;
-  };
-  const guardarUsuario = async (usuario: Usuario) =>
-    usuarioRepository.create(new Usuario(usuario.username, await guardarRol(usuario.rol)));
-  const guardarVecino = async (vecino: Vecino) =>
-    vecinoRepository.create(new Vecino(vecino.nombre, await guardarUsuario(vecino.usuario), vecino.barrio, vecino.canalPreferido));
-
-  ana = await guardarVecino(ANA);
-  bruno = await guardarVecino(BRUNO);
-  operadora = await guardarUsuario(OPERADORA);
-  miembroNorte = await guardarUsuario(MIEMBRO_NORTE);
-  bache = await tipoIncidenteRepository.create(BACHE);
-  norte = await cuadrillaRepository.create(new Cuadrilla(NORTE.nombre, NORTE.base, [bache], [miembroNorte]));
-}
-
 const unBacheReportadoPor = (vecino: Vecino) =>
   Incidente.reportar(bache, 'Bache profundo en la mano que va al centro', MEDRANO_950, vecino, INICIO);
 
 const leer = async (incidente: Incidente) => (await incidenteRepository.getById(incidente.id!))!;
 
 describe('incidenteRepository (PostgreSQL)', () => {
-  beforeAll(async () => {
-    if (process.env.DB_SCHEMA !== 'pruebas') {
-      throw new Error('Los tests de repositorios solo corren sobre el esquema "pruebas"');
-    }
-    await inicializarDB();
-  });
-
-  afterAll(() => AppDataSource.destroy());
+  beforeAll(conectarBaseDePruebas);
+  afterAll(desconectarBaseDePruebas);
 
   beforeEach(async () => {
-    await AppDataSource.synchronize(true);
-    await guardarEscenario();
+    ({ ana, bruno, operadora, miembroNorte, bache, norte } = await reiniciarBase());
   });
 
   it('guarda un incidente nuevo, le asigna id y lo recupera igual', async () => {
